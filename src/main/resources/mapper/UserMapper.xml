@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.soundhub.infrastructure.mapper.UserMapper">
+    <select id="find" parameterType="Long" resultType="soundhub.infrastructure.model.UserRow">
+        SELECT
+            id,
+            name,
+            age,
+            address
+        FROM
+            user
+        WHERE
+            id = #{id}
+    </select>
+
+    <insert id="create" parameterType="com.example.soundhub.domain.model.User" >
+        INSERT INTO
+            user
+        (
+            id,
+            name,
+            age,
+            address
+        )
+        VALUES
+            (
+                #{id},
+                #{name},
+                #{age},
+                #{address}
+            )
+    </insert>
+</mapper>
+
+
