@@ -1,18 +1,20 @@
 package com.example.soundhub.infrastructure.mapper;
 
-import com.example.soundhub.domain.model.User;
-import com.example.soundhub.infrastructure.model.UserRow;
+import com.example.soundhub.domain.User;
+
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 @Mapper
 @Repository
 public interface UserMapper {
+    @Select("SELECT * FROM users WHERE id = #{id}")
+    User findUserById(Long id);
 
-    // @Select(SELECT * FROM person WHERE id = #{id}") 으로 작성 가능. (보통 복잡한 쿼리만 xml 작성)
-    UserRow find(Long id);
+    int register(User user);
 
-    int create(User user);
-
+    int idCheck(String login_id);
 }
 

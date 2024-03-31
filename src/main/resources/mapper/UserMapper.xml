@@ -2,35 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.soundhub.infrastructure.mapper.UserMapper">
-    <select id="find" parameterType="Long" resultType="soundhub.infrastructure.model.UserRow">
-        SELECT
-            id,
-            name,
-            age,
-            address
-        FROM
-            user
-        WHERE
-            id = #{id}
-    </select>
-
-    <insert id="create" parameterType="com.example.soundhub.domain.model.User" >
+    <insert id="register" parameterType="com.example.soundhub.domain.User"  useGeneratedKeys="true"
+            keyProperty="id">
         INSERT INTO
-            user
+            Users
         (
-            id,
             name,
-            age,
-            address
+            login_id,
+            password
         )
         VALUES
             (
-                #{id},
                 #{name},
-                #{age},
-                #{address}
+                #{login_id},
+                #{password}
             )
     </insert>
+
+    <select id="idCheck" resultType="int">
+        SELECT COUNT(login_id)
+        FROM Users
+        WHERE login_id = #{login_id}
+    </select>
 </mapper>
 
 
