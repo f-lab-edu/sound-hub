@@ -7,13 +7,14 @@ import com.example.soundhub.infrastructure.mapper.UserMapper;
 import com.example.soundhub.presentation.dto.request.UserRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import static com.example.soundhub.config.exception.ErrorResponseStatus.*;
 
-@Log4j2
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -22,17 +23,18 @@ public class UserService {
 
     @Transactional
     public String registerUser(UserRequest.join request) {
-        // id 중복 체크
         boolean dupIdResult = isDuplicatedId(request.getLogin_id());
         if (dupIdResult) {
             throw new BadRequestException(DUPLICATE_ID);
         }
 
-        User user = User.builder().name(request.getName()).login_id(request
-                .getLogin_id()).password(request.getPassword()).build();
+        User user = User.builder()
+                .name(request.getName())
+                .login_id(request.getLogin_id())
+                .password(request.getPassword())
+                .build();
 
         int insertCount = userMapper.register(user);
-        System.out.println("insert count : " + insertCount);
         if (insertCount != 1) {
             log.error("insertMember ERROR! {}", user);
             throw new RuntimeException(
@@ -43,6 +45,6 @@ public class UserService {
 
 
     public boolean isDuplicatedId(String id) {
-        return userMapper.idCheck(id) == 1;
+        return userMapper.existsByLoginId(id);
     }
 }

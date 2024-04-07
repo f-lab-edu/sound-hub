@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 
 @TestPropertySource(locations = "classpath:application-test.yml")
 @MybatisTest
@@ -23,12 +21,11 @@ public class UserMapperTest {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    User user = User.builder().name("name").login_id("login_id")
-            .password("password").build();
+    User user = User.builder().name("name").login_id("login_id").password("password").build();
 
     @AfterEach
     public void afterEach() {
-        jdbcTemplate.update("DELETE FROM Users");
+        jdbcTemplate.update("TRUNCATE TABLE Users");
     }
 
     @Test
@@ -41,16 +38,16 @@ public class UserMapperTest {
     @Test
     void idCheck() {
         userMapper.register(user);
-        int exist = userMapper.idCheck(user.getLogin_id());
+        boolean exist = userMapper.existsByLoginId(user.getLogin_id());
 
-        Assertions.assertEquals(1, exist);
+        Assertions.assertEquals(true, exist);
     }
 
     @Test
     void findByUserIdx() {
         userMapper.register(user);
         User foundUser = userMapper.findUserById(user.getId());
-        System.out.println("user ID : " + user.getId());
+
         Assertions.assertEquals(user, foundUser);
     }
 

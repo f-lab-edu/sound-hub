@@ -15,6 +15,7 @@ public interface UserMapper {
 
     int register(User user);
 
-    int idCheck(String login_id);
+    @Select("SELECT EXISTS(SELECT 1 FROM Users WHERE login_id = #{login_id})")
+    boolean existsByLoginId(String login_id);
 }
 
