@@ -12,8 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) // Start with a random port
 public class UserControllerTest {
@@ -28,12 +28,12 @@ public class UserControllerTest {
 
     @Test
     public void join_ShouldRegisterUserAndReturnUserName() throws Exception {
-        // Arrange
-        UserRequest.join request = UserRequest.join.builder().name("John Doe").login_id("johnDoe").password("password").build();
+        // Given
+        UserRequest.join request = UserRequest.join.builder().name("John Doe").loginId("johnDoe").password("password").build();
 
         String expectedResponse = "John Doe";
 
-        // Act
+        // When
         ExtractableResponse<Response> createResponse = RestAssured.
                 given()
                 .log().all().body(request).
@@ -43,8 +43,8 @@ public class UserControllerTest {
                 then().
                 log().all().extract();
 
-        // Assert
-        assertEquals(HttpStatus.OK.value(), createResponse.statusCode());
-        assertEquals(expectedResponse, createResponse.body().asString());
+        // Then
+        assertThat(createResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(createResponse.body().asString()).isEqualTo(expectedResponse);
     }
 }

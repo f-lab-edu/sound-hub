@@ -11,11 +11,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.BDDMockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @TestPropertySource(locations = "classpath:application-test.yml")
 @ExtendWith(MockitoExtension.class)
@@ -34,25 +34,25 @@ public class UserServiceTest {
     void setUp() {
         userRequest = UserRequest.join.builder()
                 .name("testName")
-                .login_id("testLoginId")
+                .loginId("testLoginId")
                 .password("testPassword")
                 .build();
 
         userRequest2 = UserRequest.join.builder()
                 .name("testName2")
-                .login_id("testLoginId2")
+                .loginId("testLoginId2")
                 .password("testPassword2")
                 .build();
 
         user = User.builder()
                 .name(userRequest.getName())
-                .login_id(userRequest.getLogin_id())
+                .loginId(userRequest.getLoginId())
                 .password(userRequest.getPassword())
                 .build();
 
         user2 = User.builder()
                 .name(userRequest2.getName())
-                .login_id(userRequest2.getLogin_id())
+                .loginId(userRequest2.getLoginId())
                 .password(userRequest2.getPassword())
                 .build();
 
@@ -62,18 +62,18 @@ public class UserServiceTest {
     void registerUser_WithNonDuplicateId_ShouldSucceed() {
         // Given
         given(userMapper.existsByLoginId(anyString())).willReturn(false);
-        given(userMapper.register(any(User.class))).willReturn(1);
+        given(userMapper.create(any(User.class))).willReturn(1);
 
         // When
         String registeredUserName = userService.registerUser(userRequest);
         String registeredUserName2 = userService.registerUser(userRequest2);
 
         // Then
-        assertEquals(user.getName(), registeredUserName);
-        assertEquals(user2.getName(), registeredUserName2);
+        assertThat(registeredUserName).isEqualTo(user.getName());
+        assertThat(registeredUserName2).isEqualTo(user2.getName());
 
         then(userMapper).should(times(2)).existsByLoginId(anyString());
-        then(userMapper).should(times(2)).register(any(User.class));
+        then(userMapper).should(times(2)).create(any(User.class));
     }
 
     @Test
@@ -82,8 +82,10 @@ public class UserServiceTest {
         given(userMapper.existsByLoginId(anyString())).willReturn(true);
 
         // When & Then
-        assertThrows(BadRequestException.class, () -> userService.registerUser(userRequest));
+        assertThatExceptionOfType(BadRequestException.class)
+                .isThrownBy(() -> userService.registerUser(userRequest));
+
         then(userMapper).should(times(1)).existsByLoginId(anyString());
-        then(userMapper).should(never()).register(any(User.class));
+        then(userMapper).should(never()).create(any(User.class));
     }
 }

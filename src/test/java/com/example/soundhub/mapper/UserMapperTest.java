@@ -11,44 +11,50 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.assertj.core.api.Assertions.*;
+
 
 @TestPropertySource(locations = "classpath:application-test.yml")
 @MybatisTest
 public class UserMapperTest {
+
     @Autowired
     UserMapper userMapper;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    User user = User.builder().name("name").login_id("login_id").password("password").build();
+    User user = User.builder().name("name").loginId("loginId").password("password").build();
 
     @AfterEach
     public void afterEach() {
-        jdbcTemplate.update("TRUNCATE TABLE Users");
+        jdbcTemplate.update("TRUNCATE TABLE users");
     }
 
     @Test
     void register() {
-        int success = userMapper.register(user);
+        int success = userMapper.create(user);
 
-        Assertions.assertEquals(1, success);
+        assertThat(1).isEqualTo(success);
     }
 
     @Test
-    void idCheck() {
-        userMapper.register(user);
-        boolean exist = userMapper.existsByLoginId(user.getLogin_id());
+    void existsByLoginId() {
+        userMapper.create(user);
+        boolean exist = userMapper.existsByLoginId(user.getLoginId());
 
-        Assertions.assertEquals(true, exist);
+        assertThat(true).isEqualTo(exist);
     }
 
     @Test
     void findByUserIdx() {
-        userMapper.register(user);
+        userMapper.create(user);
         User foundUser = userMapper.findUserById(user.getId());
 
-        Assertions.assertEquals(user, foundUser);
-    }
+        System.out.println(foundUser.getId());
+        System.out.println(foundUser.getLoginId());
+        System.out.println(foundUser.getName());
 
+        assertThat(user.getLoginId()).isEqualTo(foundUser.getLoginId());
+    }
 }

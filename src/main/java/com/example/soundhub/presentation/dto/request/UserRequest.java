@@ -3,7 +3,6 @@ package com.example.soundhub.presentation.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 
 public class UserRequest {
@@ -11,7 +10,7 @@ public class UserRequest {
     @Builder
     public static class join {
         private String name;
-        private String login_id;
+        private String loginId;
         private String password;
     }
 

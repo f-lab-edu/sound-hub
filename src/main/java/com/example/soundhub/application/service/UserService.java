@@ -6,8 +6,8 @@ import com.example.soundhub.domain.User;
 import com.example.soundhub.infrastructure.mapper.UserMapper;
 import com.example.soundhub.presentation.dto.request.UserRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,22 +23,23 @@ public class UserService {
 
     @Transactional
     public String registerUser(UserRequest.join request) {
-        boolean dupIdResult = isDuplicatedId(request.getLogin_id());
+        boolean dupIdResult = isDuplicatedId(request.getLoginId());
         if (dupIdResult) {
             throw new BadRequestException(DUPLICATE_ID);
         }
 
         User user = User.builder()
                 .name(request.getName())
-                .login_id(request.getLogin_id())
+                .loginId(request.getLoginId())
                 .password(request.getPassword())
                 .build();
 
-        int insertCount = userMapper.register(user);
-        if (insertCount != 1) {
-            log.error("insertMember ERROR! {}", user);
+        try {
+            userMapper.create(user);
+        } catch (DataAccessException e) {
+            log.error("insertMember ERROR! {}", e.getMessage());
             throw new RuntimeException(
-                    "insertUser ERROR! 회원가입 메서드를 확인해주세요\n" + "Params : " + user);
+                    "insertUser ERROR! 회원가입 메서드를 확인해주세요\n" + "Params : " + user, e);
         }
         return user.getName();
     }
