@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:h2:~/testDB
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  sql:
+    init:
+      mode: always
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
