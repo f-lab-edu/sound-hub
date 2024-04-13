@@ -11,8 +11,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import static com.example.soundhub.config.exception.ErrorResponseStatus.*;
+import static com.example.soundhub.config.exception.ErrorResponseStatus.DUPLICATE_ID;
 
 @Slf4j
 @Service
@@ -28,18 +27,13 @@ public class UserService {
             throw new BadRequestException(DUPLICATE_ID);
         }
 
-        User user = User.builder()
-                .name(request.getName())
-                .loginId(request.getLoginId())
-                .password(request.getPassword())
-                .build();
+        User user = User.builder().name(request.getName()).loginId(request.getLoginId()).password(request.getPassword()).build();
 
         try {
             userMapper.create(user);
         } catch (DataAccessException e) {
             log.error("insertMember ERROR! {}", e.getMessage());
-            throw new RuntimeException(
-                    "insertUser ERROR! 회원가입 메서드를 확인해주세요\n" + "Params : " + user, e);
+            throw new RuntimeException("insertUser ERROR! 회원가입 메서드를 확인해주세요\n" + "Params : " + user, e);
         }
         return user.getName();
     }
