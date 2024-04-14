@@ -13,7 +13,7 @@ public enum ErrorResponseStatus {
     //4000 : Database, Server 오류
     DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
     FILE_SAVE_ERROR(false, 4001, "파일 저장이 실패하였습니다."),
-    EXIST_USER(false, 4002, "이미 등록된 유저가 있습니다."),
+    REGISTER_USER_ERROR(false, 4002, "회원가입 insert에 실패 했습니다"),
     NOT_FOUND_USER(false, 4003, "등록된 유저가 없습니다."),
     INVALID_PWD(false, 4004, "비밀번호가 올바르지 않습니다."),
     DB_INSERT_ERROR(false, 4005, "DB에 값을 삽입 하는데 실패 했습니다."),

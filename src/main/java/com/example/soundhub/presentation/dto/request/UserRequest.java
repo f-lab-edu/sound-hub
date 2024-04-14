@@ -16,7 +16,7 @@ public class UserRequest {
 
     @Getter
     public static class login {
-        private String name;
+        private String loginId;
         private String password;
     }
 }
