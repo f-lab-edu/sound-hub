@@ -3,7 +3,8 @@ package com.example.soundhub.config.exception;
 public enum ErrorResponseStatus {
     // 2000 : Request 오류
     REQUEST_ERROR(false, 2000, "입력값을 확인해주세요."),
-    DUPLICATE_ID(false, 2001, "중복된 아이디 입니다."),
+    DUPLICATE_RECORD(false, 2001, "중복된 레코드 입니다."),
+    DUPLICATE_ID(false, 2002, "중복된 아이디 입니다."),
 
 
     // 3000 : Response 오류
@@ -11,8 +12,8 @@ public enum ErrorResponseStatus {
 
 
     //4000 : Database, Server 오류
-    DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
-    FILE_SAVE_ERROR(false, 4001, "파일 저장이 실패하였습니다."),
+    DATABASE_ERROR(false, 4000, "데이터 베이스 접근 오류."),
+    QUERY_TIMEOUT_ERROR(false, 4001, "쿼리 타임 아웃 에러."),
     REGISTER_USER_ERROR(false, 4002, "회원가입 insert에 실패 했습니다"),
     NOT_FOUND_USER(false, 4003, "등록된 유저가 없습니다."),
     INVALID_PWD(false, 4004, "비밀번호가 올바르지 않습니다."),

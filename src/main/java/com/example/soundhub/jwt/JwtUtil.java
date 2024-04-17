@@ -13,8 +13,11 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    long accessTokenValidity = 1000 * 60 * 30;
-    long refreshTokenValidity = 1000 * 60 * 60 * 24 * 7;
+    @Value("${ACCESS_TOKEN}")
+    long accessTokenValidity;
+
+    @Value("${REFRESH_TOKEN}")
+    long refreshTokenValidity;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -23,7 +26,11 @@ public class JwtUtil {
         String accessToken = createAccessToken(name);
         String refreshToken = createRefreshToken(name);
 
-        UserResponse.tokenInfo tokenInfo = UserResponse.tokenInfo.builder().grantType("Bearer").accessToken(accessToken).refreshToken(refreshToken).build();
+        UserResponse.tokenInfo tokenInfo = UserResponse.tokenInfo.builder()
+                .grantType("Bearer")
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
 
         return tokenInfo;
     }
@@ -34,7 +41,13 @@ public class JwtUtil {
         claims.put("userName", name);
         claims.put("type", "Access");
 
-        return Jwts.builder().setClaims(claims).setSubject("AccessToken").setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + accessTokenValidity)).signWith(SignatureAlgorithm.HS256, secretKey).compact();
+        return Jwts.builder().
+                setClaims(claims)
+                .setSubject("AccessToken")
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + accessTokenValidity))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
     }
 
 
@@ -43,7 +56,13 @@ public class JwtUtil {
         claims.put("userName", name);
         claims.put("type", "Refresh");
 
-        return Jwts.builder().setClaims(claims).setSubject("RefreshToken").setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + refreshTokenValidity)).signWith(SignatureAlgorithm.HS256, secretKey).compact();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject("RefreshToken")
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenValidity))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
     }
 
 

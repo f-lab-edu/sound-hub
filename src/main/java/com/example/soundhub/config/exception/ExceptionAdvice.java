@@ -14,4 +14,11 @@ public class ExceptionAdvice {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<Object> handleDatabaseException (DatabaseException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(ex.getStatus().getCode(), ex.getMessage());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }
