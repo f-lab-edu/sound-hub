@@ -35,15 +35,8 @@ public enum ErrorResponseStatus {
         this.message = message;
     }
 
-    public boolean isSuccess() {
-        return this.isSuccess;
-    }
-
     public int getCode() {
         return this.code;
     }
 
-    public String getMessage() {
-        return this.message;
-    }
 }
