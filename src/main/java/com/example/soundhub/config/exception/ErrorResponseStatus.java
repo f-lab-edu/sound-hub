@@ -3,8 +3,8 @@ package com.example.soundhub.config.exception;
 public enum ErrorResponseStatus {
     // 2000 : Request 오류
     REQUEST_ERROR(false, 2000, "입력값을 확인해주세요."),
-    DUPLICATE_RECORD(false, 2001, "중복된 레코드 입니다."),
-    DUPLICATE_ID(false, 2002, "중복된 아이디 입니다."),
+    DUPLICATE_ERROR(false, 2001, "중복된 레코드 입니다."),
+
 
 
     // 3000 : Response 오류
