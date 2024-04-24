@@ -14,3 +14,5 @@ mybatis:
 
 jwt:
   secret: ${SECRET_KEY}
+  refreshTokenValidity: ${REFRESH_TOKEN}
+  accessTokenValidity: ${ACCESS_TOKEN}
