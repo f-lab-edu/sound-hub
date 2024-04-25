@@ -2,7 +2,7 @@ package com.example.soundhub.config.exception;
 
 public enum ErrorResponseStatus {
 	// 2000 : Request 오류
-	REQUEST_ERROR(false, 2000, "입력값을 확인해주세요."),
+	REQUEST_ERROR(false, 2000, "입력값을 확인 해주세요."),
 	DUPLICATE_ERROR(false, 2001, "중복된 레코드 입니다."),
 	INVALID_PWD(false, 2002, "비밀번호가 올바르지 않습니다."),
 
