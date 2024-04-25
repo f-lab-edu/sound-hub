@@ -54,7 +54,7 @@ public class UserDao {
 		} catch (DataAccessException e) {
 			log.error("insertMember ERROR! {}", e.getMessage());
 			log.error("Params : {}", user);
-			throw new BadRequestException(REGISTER_USER_ERROR);
+			throw new DatabaseException(DATABASE_ERROR);
 		}
 		return user.getName();
 	}
