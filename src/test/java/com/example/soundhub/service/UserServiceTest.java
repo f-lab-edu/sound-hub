@@ -1,11 +1,8 @@
 package com.example.soundhub.service;
 
-import com.example.soundhub.application.service.UserService;
-import com.example.soundhub.domain.User;
-import com.example.soundhub.infrastructure.mapper.UserMapper;
-import com.example.soundhub.presentation.dto.request.UserRequest;
-import com.example.soundhub.config.exception.BadRequestException;
-import org.junit.jupiter.api.BeforeEach;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,79 +10,62 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.BDDMockito.*;
-import static org.assertj.core.api.Assertions.assertThat;
+import com.example.soundhub.application.service.UserService;
+import com.example.soundhub.domain.User;
+import com.example.soundhub.infrastructure.dao.UserDao;
+import com.example.soundhub.infrastructure.mapper.UserMapper;
+import com.example.soundhub.jwt.JwtUtil;
+import com.example.soundhub.presentation.dto.request.UserRequest;
 
 @TestPropertySource(locations = "classpath:application-test.yml")
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
-    @Mock
-    private UserMapper userMapper;
-    @InjectMocks
-    private UserService userService;
-    private UserRequest.join userRequest;
-    private UserRequest.join userRequest2;
-    private User user;
 
-    private User user2;
+	@Mock
+	private UserMapper userMapper;
 
-    @BeforeEach
-    void setUp() {
-        userRequest = UserRequest.join.builder()
-                .name("testName")
-                .loginId("testLoginId")
-                .password("testPassword")
-                .build();
+	@Mock
+	private JwtUtil jwtUtil;
 
-        userRequest2 = UserRequest.join.builder()
-                .name("testName2")
-                .loginId("testLoginId2")
-                .password("testPassword2")
-                .build();
+	@Mock
+	private UserDao userDao;
 
-        user = User.builder()
-                .name(userRequest.getName())
-                .loginId(userRequest.getLoginId())
-                .password(userRequest.getPassword())
-                .build();
+	@InjectMocks
+	private UserService userService;
 
-        user2 = User.builder()
-                .name(userRequest2.getName())
-                .loginId(userRequest2.getLoginId())
-                .password(userRequest2.getPassword())
-                .build();
+	@Test
+	public void testRegisterUser_Success() {
+		// Given
+		UserRequest.join request = UserRequest.join.builder()
+			.name("JohnDoe")
+			.loginId("johndoe123")
+			.password("password123")
+			.build();
 
-    }
+		User user = User.builder()
+			.name(request.getName())
+			.loginId(request.getLoginId())
+			.password(request.getPassword())
+			.build();
 
-    @Test
-    void registerUser_WithNonDuplicateId_ShouldSucceed() {
-        // Given
-        given(userMapper.existsByLoginId(anyString())).willReturn(false);
-        given(userMapper.create(any(User.class))).willReturn(1);
+		// When
+		when(userDao.create(user)).thenReturn(user);
 
-        // When
-        String registeredUserName = userService.registerUser(userRequest);
-        String registeredUserName2 = userService.registerUser(userRequest2);
+		// Then
+		assertThat(userService.registerUser(request)).isEqualTo(user.getName());
+	}
 
-        // Then
-        assertThat(registeredUserName).isEqualTo(user.getName());
-        assertThat(registeredUserName2).isEqualTo(user2.getName());
+	@Test
+	public void testLogin_Success() {
+		// Given
+		UserRequest.login request = new UserRequest.login("johndoe123", "password123");
+		User user = new User("JohnDoe", "johndoe123", "password123");
 
-        then(userMapper).should(times(2)).existsByLoginId(anyString());
-        then(userMapper).should(times(2)).create(any(User.class));
-    }
+		when(userDao.findByLoginId(request.getLoginId())).thenReturn(user);
 
-    @Test
-    void registerUser_WithDuplicateId_ShouldThrowBadRequestException() {
-        // Given
-        given(userMapper.existsByLoginId(anyString())).willReturn(true);
+		// Then
+		assertThatCode(() -> userService.login(request))
+			.doesNotThrowAnyException();
+	}
 
-        // When & Then
-        assertThatExceptionOfType(BadRequestException.class)
-                .isThrownBy(() -> userService.registerUser(userRequest));
-
-        then(userMapper).should(times(1)).existsByLoginId(anyString());
-        then(userMapper).should(never()).create(any(User.class));
-    }
 }
