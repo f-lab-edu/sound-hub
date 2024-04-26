@@ -8,6 +8,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.QueryTimeoutException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.soundhub.config.exception.BadRequestException;
 import com.example.soundhub.config.exception.DatabaseException;
@@ -40,9 +41,27 @@ public class UserDao {
 		}
 	}
 
-	public String create(User user) {
+	public User findById(Long userId) {
 		try {
-			userMapper.create(user);
+			return userMapper.findUserById(userId);
+		} catch (EmptyResultDataAccessException e) {
+			throw new BadRequestException(NOT_FOUND_USER);
+		} catch (QueryTimeoutException e) {
+			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
+		} catch (DataAccessException e) {
+			log.error("A data access error occurred: {}", e.getMessage());
+			throw new DatabaseException(DATABASE_ERROR);
+		}
+	}
+
+	@Transactional
+	public User create(User user) {
+		try {
+			int success = userMapper.create(user);
+			if (success == 0) { // Assuming 'create' returns the number of inserted rows.
+				log.error("No user was created, user details: {}", user);
+				throw new DatabaseException(DB_INSERT_ERROR);
+			}
 		} catch (DuplicateKeyException e) {
 			log.error("Duplicate Key Insert ERROR! {}", e.getMessage());
 			log.error("Params : {}", user);
@@ -56,6 +75,7 @@ public class UserDao {
 			log.error("Params : {}", user);
 			throw new DatabaseException(DATABASE_ERROR);
 		}
-		return user.getName();
+
+		return findById(user.getId());
 	}
 }

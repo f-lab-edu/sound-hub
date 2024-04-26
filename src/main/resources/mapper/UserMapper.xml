@@ -4,19 +4,13 @@
 <mapper namespace="com.example.soundhub.infrastructure.mapper.UserMapper">
     <insert id="create" parameterType="com.example.soundhub.domain.User" useGeneratedKeys="true"
             keyProperty="id">
-        INSERT INTO
-            users
-        (
-            name,
-            login_id,
-            password
-        )
-        VALUES
-            (
-                #{name},
+        INSERT INTO users
+        (name,
+         login_id,
+         password)
+        VALUES (#{name},
                 #{loginId},
-                #{password}
-            )
+                #{password})
     </insert>
 </mapper>
 

@@ -32,9 +32,9 @@ public class UserService {
 			.password(request.getPassword())
 			.build();
 
-		String userName = userDao.create(user);
-
-		return userName;
+		User result = userDao.create(user);
+		
+		return result.getName();
 	}
 
 	@Transactional
