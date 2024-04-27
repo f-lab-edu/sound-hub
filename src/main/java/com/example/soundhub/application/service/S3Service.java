@@ -1,8 +1,14 @@
 package com.example.soundhub.application.service;
 
+import static com.example.soundhub.config.exception.ErrorResponseStatus.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.example.soundhub.config.exception.DatabaseException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,6 +79,25 @@ public class S3Service {
 		} else {
 			log.error("Failed to create new file [{}]", convertFile.getPath());
 			return Optional.empty();
+		}
+	}
+
+	public void deleteImageFromS3(String imageAddress) {
+		String key = getKeyFromImageAddress(imageAddress);
+		try {
+			amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, key));
+		} catch (Exception e) {
+			throw new DatabaseException(IMAGE_DELETE_ERROR);
+		}
+	}
+
+	private String getKeyFromImageAddress(String imageAddress) {
+		try {
+			URL url = new URL(imageAddress);
+			String decodingKey = URLDecoder.decode(url.getPath(), "UTF-8");
+			return decodingKey.substring(1); // 맨 앞의 '/' 제거
+		} catch (MalformedURLException | UnsupportedEncodingException e) {
+			throw new DatabaseException(IMAGE_DELETE_ERROR);
 		}
 	}
 }
