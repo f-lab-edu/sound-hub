@@ -2,7 +2,6 @@ package com.example.soundhub.infrastructure.dao;
 
 import static com.example.soundhub.config.exception.ErrorResponseStatus.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -15,18 +14,15 @@ import com.example.soundhub.config.exception.DatabaseException;
 import com.example.soundhub.domain.User;
 import com.example.soundhub.infrastructure.mapper.UserMapper;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Repository
 @Slf4j
+@RequiredArgsConstructor
 public class UserDao {
 
 	private final UserMapper userMapper;
-
-	@Autowired
-	public UserDao(UserMapper userMapper) {
-		this.userMapper = userMapper;
-	}
 
 	public User findByLoginId(String loginId) {
 		try {
