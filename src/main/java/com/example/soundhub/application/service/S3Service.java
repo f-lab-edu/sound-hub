@@ -25,7 +25,6 @@ public class S3Service {
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
 
-	// MultipartFile to File conversion and upload to S3
 	public String upload(MultipartFile multipartFile, String dirName) throws IOException {
 		log.debug("Attempting to upload file [{}] to directory [{}]", multipartFile.getOriginalFilename(), dirName);
 
@@ -33,60 +32,40 @@ public class S3Service {
 			.orElseThrow(() -> new IllegalArgumentException("Failed to convert MultipartFile to File"));
 
 		try {
-			return upload(uploadFile, dirName);
+			String fileUrl = uploadToS3(uploadFile, dirName);
+			if (!uploadFile.delete()) {
+				log.error("Failed to delete temporary file [{}]", uploadFile.getPath());
+			}
+			return fileUrl;
 		} catch (Exception e) {
 			log.error("Error uploading file [{}] to S3 bucket [{}]", uploadFile.getName(), bucket, e);
 			throw e;
 		}
 	}
 
-	private String upload(File uploadFile, String dirName) {
+	private String uploadToS3(File uploadFile, String dirName) {
 		String fileName = dirName + "/" + uploadFile.getName();
-		try {
-			String uploadImageUrl = putS3(uploadFile, fileName);
-			removeNewFile(uploadFile);
-			return uploadImageUrl;
-		} catch (Exception e) {
-			log.error("Failed to upload file [{}] to S3 under directory [{}]", uploadFile.getName(), dirName, e);
-			throw e;
-		}
-	}
-
-	private String putS3(File uploadFile, String fileName) {
-		try {
-			amazonS3Client.putObject(
-				new PutObjectRequest(bucket, fileName, uploadFile)
-					.withCannedAcl(CannedAccessControlList.PublicRead) // Upload file with PublicRead access
-			);
-			String fileUrl = amazonS3Client.getUrl(bucket, fileName).toString();
-			log.info("File [{}] uploaded successfully to [{}]", fileName, fileUrl);
-			return fileUrl;
-		} catch (Exception e) {
-			log.error("Exception uploading file [{}] to S3", fileName, e);
-			throw e;
-		}
-	}
-
-	private void removeNewFile(File targetFile) {
-		if (targetFile.delete()) {
-			log.info("Successfully deleted local file [{}]", targetFile.getName());
-		} else {
-			log.error("Failed to delete local file [{}]", targetFile.getName());
-		}
+		log.debug("Uploading file [{}] to S3 bucket [{}]", fileName, bucket);
+		amazonS3Client.putObject(
+			new PutObjectRequest(bucket, fileName, uploadFile)
+				.withCannedAcl(CannedAccessControlList.PublicRead)
+		);
+		String fileUrl = amazonS3Client.getUrl(bucket, fileName).toString();
+		log.info("File [{}] uploaded successfully to URL [{}]", fileName, fileUrl);
+		return fileUrl;
 	}
 
 	private Optional<File> convert(MultipartFile file) throws IOException {
-		File convertFile = new File(System.getProperty("java.io.tmpdir") + "/"
-			+ file.getOriginalFilename()); // Store file in temporary directory
-		log.debug("Converting multipart file [{}] to file [{}]", file.getOriginalFilename(), convertFile.getPath());
+		File convertFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
+		log.debug("Creating temporary file [{}] for conversion", convertFile.getPath());
 
 		if (convertFile.createNewFile()) {
 			try (FileOutputStream fos = new FileOutputStream(convertFile)) {
 				fos.write(file.getBytes());
-				log.info("File [{}] created successfully", convertFile.getPath());
+				log.info("Temporary file [{}] created successfully", convertFile.getPath());
 				return Optional.of(convertFile);
 			} catch (IOException e) {
-				log.error("Failed to write to file [{}]", convertFile.getPath(), e);
+				log.error("Failed to write to temporary file [{}]", convertFile.getPath(), e);
 				throw e;
 			}
 		} else {
