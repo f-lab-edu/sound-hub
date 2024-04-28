@@ -7,7 +7,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.QueryTimeoutException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.soundhub.config.exception.BadRequestException;
 import com.example.soundhub.config.exception.DatabaseException;
@@ -50,7 +49,6 @@ public class UserDao {
 		}
 	}
 
-	@Transactional
 	public User create(User user) {
 		try {
 			int success = userMapper.create(user);
