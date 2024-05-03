@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.soundhub.application.service.S3Service;
 import com.example.soundhub.application.service.WorkService;
 import com.example.soundhub.presentation.dto.request.WorkRequest;
 
@@ -18,8 +17,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/work")
 @RequiredArgsConstructor
 public class WorkController {
-
-	private final S3Service s3Service;
 
 	private final HttpServletRequest servletRequest;
 
