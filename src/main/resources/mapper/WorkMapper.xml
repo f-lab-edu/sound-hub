@@ -5,11 +5,11 @@
     <insert id="create" parameterType="com.example.soundhub.domain.Work" useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO works
-        (userId,
+        (user_id,
          name,
-         workType,
-         youtubeUrl,
-         workImageUrl)
+         work_type,
+         youtube_url,
+         work_image_url)
         VALUES (#{userId},
                 #{name},
                 #{workType},
