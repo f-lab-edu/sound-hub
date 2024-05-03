@@ -15,6 +15,7 @@ public enum ErrorResponseStatus {
 	DB_INSERT_ERROR(false, 4002, "DB에 값을 삽입 하는데 실패 했습니다."),
 	NOT_FOUND_USER(false, 4003, "등록된 유저가 없습니다."),
 	IMAGE_DELETE_ERROR(false, 4004, "이미지 삭제 실패"),
+	IMAGE_UPLOAD_ERROR(false, 4005, "이미지 업로드 실패"),
 
 	//5000 : Server connection 오류
 	SERVER_ERROR(false, 5000, "서버와의 연결에 실패하였습니다."),
