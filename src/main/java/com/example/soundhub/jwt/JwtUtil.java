@@ -23,9 +23,9 @@ public class JwtUtil {
 	@Value("${jwt.secret}")
 	private String secretKey;
 
-	public UserResponse.tokenInfo generateTokens(String name) {
-		String accessToken = createAccessToken(name);
-		String refreshToken = createRefreshToken(name);
+	public UserResponse.tokenInfo generateTokens(Long userId) {
+		String accessToken = createAccessToken(userId);
+		String refreshToken = createRefreshToken(userId);
 
 		UserResponse.tokenInfo tokenInfo = UserResponse.tokenInfo.builder()
 			.grantType("Bearer")
@@ -36,9 +36,9 @@ public class JwtUtil {
 		return tokenInfo;
 	}
 
-	private String createAccessToken(String name) {
+	private String createAccessToken(Long userId) {
 		Claims claims = Jwts.claims();
-		claims.put("userName", name);
+		claims.put("userId", userId);
 		claims.put("type", "Access");
 
 		return Jwts.builder()
@@ -50,9 +50,9 @@ public class JwtUtil {
 			.compact();
 	}
 
-	private String createRefreshToken(String name) {
+	private String createRefreshToken(Long userId) {
 		Claims claims = Jwts.claims();
-		claims.put("userName", name);
+		claims.put("userId", userId);
 		claims.put("type", "Refresh");
 
 		return Jwts.builder()
@@ -67,9 +67,10 @@ public class JwtUtil {
 	public boolean validateToken(String token) {
 		try {
 			Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+
 			return true;
 		} catch (ExpiredJwtException e) {
-			throw e; // Propagate the exception to handle in the filter
+			throw e;
 		} catch (Exception e) {
 			return false;
 		}
@@ -77,10 +78,15 @@ public class JwtUtil {
 
 	public String refreshAccessToken(String refreshToken) {
 		Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(refreshToken).getBody();
+		Long userId = claims.get("userId", Long.class);
 
-		String userName = claims.get("userName", String.class);
-
-		return createAccessToken(userName);
+		return createAccessToken(userId);
 	}
 
+	public Long extractUserId(String token) {
+		Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+		Long userId = claims.get("userId", Long.class);
+		System.out.println("userId: " + userId);
+		return userId;
+	}
 }

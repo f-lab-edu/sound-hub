@@ -33,7 +33,7 @@ public class UserService {
 			.build();
 
 		User result = userDao.create(user);
-		
+
 		return result.getName();
 	}
 
@@ -46,7 +46,7 @@ public class UserService {
 			throw new BadRequestException(INVALID_PWD);
 		}
 
-		UserResponse.tokenInfo tokenInfo = jwtUtil.generateTokens(loginId);
+		UserResponse.tokenInfo tokenInfo = jwtUtil.generateTokens(user.getId());
 
 		return tokenInfo;
 	}
