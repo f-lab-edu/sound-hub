@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.soundhub.config.exception.DatabaseException;
+import com.example.soundhub.config.exception.AwsS3Exception;
 import com.example.soundhub.domain.User;
 import com.example.soundhub.domain.Work;
 import com.example.soundhub.infrastructure.dao.UserDao;
@@ -41,7 +41,7 @@ public class WorkService {
 			try {
 				imgUrl = s3Service.upload(image, "images");
 			} catch (IOException e) {
-				throw new DatabaseException(IMAGE_UPLOAD_ERROR);
+				throw new AwsS3Exception(IMAGE_UPLOAD_ERROR);
 			}
 		}
 

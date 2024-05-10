@@ -1,9 +1,10 @@
 package com.example.soundhub.config.exception;
 
-public class BadRequestException extends RuntimeException {
+public class AwsS3Exception extends RuntimeException {
+
 	private final ErrorResponseStatus status;
 
-	public BadRequestException(ErrorResponseStatus status) {
+	public AwsS3Exception(ErrorResponseStatus status) {
 		this.status = status;
 	}
 
