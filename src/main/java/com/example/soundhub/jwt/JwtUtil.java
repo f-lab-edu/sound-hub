@@ -1,5 +1,6 @@
 package com.example.soundhub.jwt;
 
+import java.util.Base64;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -67,7 +68,6 @@ public class JwtUtil {
 	public boolean validateToken(String token) {
 		try {
 			Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-
 			return true;
 		} catch (ExpiredJwtException e) {
 			throw e;
@@ -84,9 +84,17 @@ public class JwtUtil {
 	}
 
 	public Long extractUserId(String token) {
-		Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-		Long userId = claims.get("userId", Long.class);
+		Base64.Decoder decoder = Base64.getDecoder();
+		String[] splitJwt = token.split("\\.");
+		String payload = new String(decoder.decode(splitJwt[1]
+			.replace("-", "+")
+			.replace("_", "/")));
+
+		String result = payload.substring(payload.indexOf("userId") + 8, payload.indexOf("userId") + 9);
+		Long userId = Long.parseLong(result);
+
 		System.out.println("userId: " + userId);
 		return userId;
 	}
+
 }
