@@ -44,7 +44,7 @@ public class WorkControllerTest {
 	@Test
 	public void addWork_ShouldAddWorkAndReturnWorkId() throws Exception {
 		// Given
-		String token = authenticateAndGetToken(); // Simulate login and get token
+		String token = authenticateAndGetToken();
 		WorkRequest.addWork request = WorkRequest.addWork.builder()
 			.name("userName")
 			.workType("ALBUM")
@@ -58,7 +58,6 @@ public class WorkControllerTest {
 			"thumbnail".getBytes()
 		);
 
-		// When
 		ExtractableResponse<Response> response = RestAssured.given()
 			.header("Authorization", "Bearer " + token)
 			.body(request)
@@ -71,14 +70,11 @@ public class WorkControllerTest {
 			.log().all()
 			.extract();
 
-		// Then
 		assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.body().as(Long.class)).isGreaterThan(0);
 	}
 
-	// Helper method to simulate login and token retrieval
 	private String authenticateAndGetToken() {
-		// Implement token retrieval logic, possibly mocking the authentication call
 		return "mocked_token";
 	}
 }
