@@ -1,16 +1,16 @@
 package com.example.soundhub.presentation.controller;
 
-import java.io.IOException;
-
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.soundhub.application.service.S3Service;
+import com.example.soundhub.application.service.WorkService;
+import com.example.soundhub.jwt.JwtUtil;
+import com.example.soundhub.presentation.dto.request.WorkRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,24 +19,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WorkController {
 
-	private final S3Service s3Service;
+	private final JwtUtil jwtUtil;
 
-	@GetMapping("/tokenTest")
-	public ResponseEntity<String> test() {
-		return ResponseEntity.ok("good");
+	private final WorkService workService;
+
+	@PostMapping("/add")
+	public ResponseEntity<Long> add(@RequestHeader("Authorization") String token,
+		@RequestPart(value = "image") MultipartFile image, @RequestPart("work") WorkRequest.addWork request) {
+		Long userId = jwtUtil.extractUserId(token);
+
+		Long workId = workService.addWork(request, userId, image);
+
+		return ResponseEntity.ok(workId);
 	}
 
-	@PostMapping("/s3/upload")
-	public ResponseEntity<?> s3Upload(@RequestPart(value = "image", required = false) MultipartFile image) {
-		String profileImage = "";
-		if (image != null) {
-			try {// 파일 업로드
-				profileImage = s3Service.upload(image, "images");
-				System.out.println("fileURL = " + profileImage);
-			} catch (IOException e) {
-
-			}
-		}
-		return ResponseEntity.ok(profileImage);
-	}
 }

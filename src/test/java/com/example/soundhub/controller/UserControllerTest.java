@@ -47,7 +47,6 @@ public class UserControllerTest {
 			.loginId("johnDoe")
 			.password("password")
 			.build();
-
 		String expectedResponse = "John Doe";
 
 		// When
