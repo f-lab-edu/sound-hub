@@ -52,7 +52,7 @@ public class WorkService {
 			.name(request.getName())
 			.workType(request.getWorkType())
 			.youtubeUrl(request.getYoutubeUrl())
-			.workImageUrl(imgUrl)
+			.workImgUrl(imgUrl)
 			.workCreatedDate(request.getWorkCreatedDate())
 			.build();
 
@@ -69,7 +69,7 @@ public class WorkService {
 			.map(work -> WorkResponse.getWorksInfo.builder()
 				.name(work.getName())
 				.workType(work.getWorkType())
-				.imgUrl(work.getWorkImageUrl())
+				.imgUrl(work.getWorkImgUrl())
 				.youtubeUrl(work.getYoutubeUrl())
 				.workCreatedDate(work.getWorkCreatedDate())
 				.build())

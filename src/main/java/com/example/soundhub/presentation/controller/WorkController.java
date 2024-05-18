@@ -31,7 +31,7 @@ public class WorkController {
 
 	@PostMapping("/add")
 	public ResponseEntity<Long> addWork(@RequestHeader("Authorization") String token,
-		@RequestPart(value = "image") MultipartFile image, @RequestPart("work") WorkRequest.addWork request) {
+		@RequestPart("image") MultipartFile image, @RequestPart("work") WorkRequest.addWork request) {
 		Long userId = jwtUtil.extractUserId(token);
 
 		Long workId = workService.addWork(request, userId, image);

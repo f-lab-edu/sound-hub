@@ -15,7 +15,7 @@ public interface WorkMapper {
 	int create(Work work);
 
 	@Select("SELECT * FROM works WHERE id = #{id}")
-	Work findWorkById(Long id);
+	Work findById(Long id);
 
 	@Select("SELECT * FROM works WHERE user_id = #{userId}")
 	List<Work> findAllWorksByUserId(Long userId);

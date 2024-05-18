@@ -45,7 +45,7 @@ public class WorkMapperTest {
 	@Test
 	void findByWorkId() {
 		workMapper.create(work);
-		Work foundWork = workMapper.findWorkById(work.getId());
+		Work foundWork = workMapper.findById(work.getId());
 
 		assertThat(work.getName()).isEqualTo(foundWork.getName());
 		assertThat(work.getWorkImageUrl()).isEqualTo(foundWork.getWorkImageUrl());

@@ -29,7 +29,7 @@ public class WorkDao {
 		try {
 			int success = workMapper.create(work);
 			if (success == 0) { // Assuming 'create' returns the number of inserted rows.
-				log.error("No user was created, work details: {}", work);
+				log.error("No work was created, work details: {}", work);
 				throw new DatabaseException(DB_INSERT_ERROR);
 			}
 		} catch (DuplicateKeyException e) {
@@ -51,7 +51,7 @@ public class WorkDao {
 
 	public Work findById(Long workId) {
 		try {
-			return workMapper.findWorkById(workId);
+			return workMapper.findById(workId);
 		} catch (EmptyResultDataAccessException e) {
 			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {
