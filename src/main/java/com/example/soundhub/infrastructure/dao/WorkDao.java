@@ -2,6 +2,8 @@ package com.example.soundhub.infrastructure.dao;
 
 import static com.example.soundhub.config.exception.ErrorResponseStatus.*;
 
+import java.util.List;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -35,7 +37,7 @@ public class WorkDao {
 			log.error("Params : {}", work);
 			throw new BadRequestException(DUPLICATE_ERROR);
 		} catch (EmptyResultDataAccessException e) {
-			throw new BadRequestException(NOT_FOUND_USER);
+			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {
 			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
 		} catch (DataAccessException e) {
@@ -51,7 +53,33 @@ public class WorkDao {
 		try {
 			return workMapper.findWorkById(workId);
 		} catch (EmptyResultDataAccessException e) {
-			throw new BadRequestException(NOT_FOUND_USER);
+			throw new BadRequestException(NOT_FOUND_ERROR);
+		} catch (QueryTimeoutException e) {
+			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
+		} catch (DataAccessException e) {
+			log.error("A data access error occurred: {}", e.getMessage());
+			throw new DatabaseException(DATABASE_ERROR);
+		}
+	}
+
+	public List<Work> findAllWorksByUserId(Long userId) {
+		try {
+			return workMapper.findAllWorksByUserId(userId);
+		} catch (EmptyResultDataAccessException e) {
+			throw new BadRequestException(NOT_FOUND_ERROR);
+		} catch (QueryTimeoutException e) {
+			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
+		} catch (DataAccessException e) {
+			log.error("A data access error occurred: {}", e.getMessage());
+			throw new DatabaseException(DATABASE_ERROR);
+		}
+	}
+
+	public void deleteWork(Long workId) {
+		try {
+			workMapper.deleteWork(workId);
+		} catch (EmptyResultDataAccessException e) {
+			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {
 			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
 		} catch (DataAccessException e) {
