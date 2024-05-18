@@ -3,6 +3,7 @@ package com.example.soundhub.application.service;
 import static com.example.soundhub.config.exception.ErrorResponseStatus.*;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import com.example.soundhub.infrastructure.dao.UserDao;
 import com.example.soundhub.infrastructure.dao.WorkDao;
 import com.example.soundhub.jwt.JwtUtil;
 import com.example.soundhub.presentation.dto.request.WorkRequest;
+import com.example.soundhub.presentation.dto.response.WorkResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,10 +53,33 @@ public class WorkService {
 			.workType(request.getWorkType())
 			.youtubeUrl(request.getYoutubeUrl())
 			.workImageUrl(imgUrl)
+			.workCreatedDate(request.getWorkCreatedDate())
 			.build();
 
 		workDao.create(work);
 
 		return work.getId();
+	}
+
+	@Transactional
+	public List<WorkResponse.getWorksInfo> getUserWorks(Long userId) {
+		List<Work> works = workDao.findAllWorksByUserId(userId);
+
+		List<WorkResponse.getWorksInfo> worksInfoList = works.stream()
+			.map(work -> WorkResponse.getWorksInfo.builder()
+				.name(work.getName())
+				.workType(work.getWorkType())
+				.imgUrl(work.getWorkImageUrl())
+				.youtubeUrl(work.getYoutubeUrl())
+				.workCreatedDate(work.getWorkCreatedDate())
+				.build())
+			.toList();
+
+		return worksInfoList;
+	}
+
+	@Transactional
+	public void deleteWork(Long workId) {
+		workDao.deleteWork(workId);
 	}
 }
