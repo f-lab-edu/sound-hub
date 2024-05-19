@@ -10,10 +10,10 @@ import com.example.soundhub.domain.User;
 @Repository
 public interface UserMapper {
 	@Select("SELECT * FROM users WHERE id = #{id}")
-	User findUserById(Long id);
+	User findById(Long id);
 
 	@Select("SELECT * FROM users WHERE login_id = #{loginId}")
-	User findUserByLoginId(String loginId);
+	User findByLoginId(String loginId);
 
 	int create(User user);
 
