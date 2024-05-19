@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.soundhub.infrastructure.mapper.ProfileMapper">
+    <insert id="create" parameterType="com.example.soundhub.domain.Profile" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO profiles
+        (user_id,
+         genre,
+         position,
+         introduce,
+         background_Img_Url,
+         favorite_artist_first,
+         favorite_artist_second,
+         favorite_artist_third,
+         favorite_artist_fourth,
+         favorite_artist_fifth)
+        VALUES (#{userId},
+                #{genre},
+                #{position},
+                #{introduce},
+                #{backgroundImgUrl},
+                #{favoriteArtistFirst},
+                #{favoriteArtistSecond},
+                #{favoriteArtistThird},
+                #{favoriteArtistFourth},
+                #{favoriteArtistFifth})
+    </insert>
+</mapper>
