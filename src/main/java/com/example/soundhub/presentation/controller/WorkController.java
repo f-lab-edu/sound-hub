@@ -40,8 +40,8 @@ public class WorkController {
 	}
 
 	@GetMapping("/{userId}")
-	public ResponseEntity<List<WorkResponse.getWorksInfo>> getUserWorks(@PathVariable Long userId) {
-		List<WorkResponse.getWorksInfo> worksInfos = workService.getUserWorks(userId);
+	public ResponseEntity<List<WorkResponse.getWorksInfo>> viewUserWorks(@PathVariable Long userId) {
+		List<WorkResponse.getWorksInfo> worksInfos = workService.viewUserWorks(userId);
 
 		return ResponseEntity.ok(worksInfos);
 	}
@@ -50,7 +50,7 @@ public class WorkController {
 	public ResponseEntity<String> deleteMyWork(@PathVariable Long workId) {
 		workService.deleteWork(workId);
 
-		return ResponseEntity.ok("삭제 완료");
+		return ResponseEntity.noContent().build();
 	}
 
 }
