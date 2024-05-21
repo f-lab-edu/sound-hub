@@ -6,8 +6,6 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     username: ${DB_USER}
     password: ${DB_PASSWORD}
-  profiles:
-    include: private
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -18,6 +16,19 @@ jwt:
   secret: ${SECRET_KEY}
   refreshTokenValidity: ${REFRESH_TOKEN}
   accessTokenValidity: ${ACCESS_TOKEN}
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ${CLOUD_ACCESS_KEY}
+      secretKey: ${CLOUD_SECRET_KEY}
+    s3:
+      bucket: sound-hub
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
 
 logging:
   level:
