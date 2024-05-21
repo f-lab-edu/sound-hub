@@ -24,6 +24,13 @@ public class ExceptionAdvice {
 		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	@ExceptionHandler(AwsS3Exception.class)
+	public ResponseEntity<ErrorResponse> handleAwsS3Exception(AwsS3Exception ex) {
+		ErrorResponse errorResponse = new ErrorResponse(ex.getStatus().getCode(), ex.getStatus().getMessage());
+
+		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
 		BindingResult bindingResult = ex.getBindingResult();

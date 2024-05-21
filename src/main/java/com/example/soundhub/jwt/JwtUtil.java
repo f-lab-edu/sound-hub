@@ -1,5 +1,6 @@
 package com.example.soundhub.jwt;
 
+import java.util.Base64;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -23,9 +24,9 @@ public class JwtUtil {
 	@Value("${jwt.secret}")
 	private String secretKey;
 
-	public UserResponse.tokenInfo generateTokens(String name) {
-		String accessToken = createAccessToken(name);
-		String refreshToken = createRefreshToken(name);
+	public UserResponse.tokenInfo generateTokens(Long userId) {
+		String accessToken = createAccessToken(userId);
+		String refreshToken = createRefreshToken(userId);
 
 		UserResponse.tokenInfo tokenInfo = UserResponse.tokenInfo.builder()
 			.grantType("Bearer")
@@ -36,9 +37,9 @@ public class JwtUtil {
 		return tokenInfo;
 	}
 
-	private String createAccessToken(String name) {
+	private String createAccessToken(Long userId) {
 		Claims claims = Jwts.claims();
-		claims.put("userName", name);
+		claims.put("userId", userId);
 		claims.put("type", "Access");
 
 		return Jwts.builder()
@@ -50,9 +51,9 @@ public class JwtUtil {
 			.compact();
 	}
 
-	private String createRefreshToken(String name) {
+	private String createRefreshToken(Long userId) {
 		Claims claims = Jwts.claims();
-		claims.put("userName", name);
+		claims.put("userId", userId);
 		claims.put("type", "Refresh");
 
 		return Jwts.builder()
@@ -69,7 +70,7 @@ public class JwtUtil {
 			Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 			return true;
 		} catch (ExpiredJwtException e) {
-			throw e; // Propagate the exception to handle in the filter
+			throw e;
 		} catch (Exception e) {
 			return false;
 		}
@@ -77,10 +78,23 @@ public class JwtUtil {
 
 	public String refreshAccessToken(String refreshToken) {
 		Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(refreshToken).getBody();
+		Long userId = claims.get("userId", Long.class);
 
-		String userName = claims.get("userName", String.class);
+		return createAccessToken(userId);
+	}
 
-		return createAccessToken(userName);
+	public Long extractUserId(String token) {
+		Base64.Decoder decoder = Base64.getDecoder();
+		String[] splitJwt = token.split("\\.");
+		String payload = new String(decoder.decode(splitJwt[1]
+			.replace("-", "+")
+			.replace("_", "/")));
+
+		String result = payload.substring(payload.indexOf("userId") + 8, payload.indexOf("userId") + 9);
+		Long userId = Long.parseLong(result);
+
+		System.out.println("userId: " + userId);
+		return userId;
 	}
 
 }

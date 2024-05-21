@@ -45,13 +45,9 @@ public class UserMapperTest {
 	}
 
 	@Test
-	void findByUserIdx() {
+	void findByUserId() {
 		userMapper.create(user);
 		User foundUser = userMapper.findUserById(user.getId());
-
-		System.out.println(foundUser.getId());
-		System.out.println(foundUser.getLoginId());
-		System.out.println(foundUser.getName());
 
 		assertThat(user.getLoginId()).isEqualTo(foundUser.getLoginId());
 	}
