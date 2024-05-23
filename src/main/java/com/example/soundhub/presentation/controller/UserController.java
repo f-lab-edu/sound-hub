@@ -2,6 +2,8 @@ package com.example.soundhub.presentation.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -59,6 +61,17 @@ public class UserController {
 		Long profileId = userService.changeProfile(request, userId, image);
 
 		return ResponseEntity.ok(profileId);
+	}
+
+	@GetMapping("/profile/{userId}")
+	public ResponseEntity<UserResponse.viewProfile> viewProfile(@RequestHeader("Authorization") String token,
+		@PathVariable Long userId) {
+		Long requestUser = jwtUtil.extractUserId(token);
+		boolean isMyProfile = requestUser.equals(userId);
+
+		UserResponse.viewProfile profile = userService.viewProfile(userId, isMyProfile);
+
+		return ResponseEntity.ok(profile);
 	}
 
 }

@@ -131,4 +131,26 @@ public class UserService {
 
 		return Result.getId();
 	}
+
+	@Transactional
+	public UserResponse.viewProfile viewProfile(Long userId, boolean isMyProfile) {
+		Profile profile = profileDao.findByUserId(userId);
+
+		UserResponse.viewProfile response = UserResponse.viewProfile.builder()
+			.isMyProfile(isMyProfile)
+			.genre(profile.getGenre())
+			.position(profile.getPosition())
+			.introduce(profile.getIntroduce())
+			.backgroundImgUrl(profile.getBackgroundImgUrl())
+			.favoriteArtistFirst(profile.getFavoriteArtistFirst())
+			.favoriteArtistSecond(profile.getFavoriteArtistSecond())
+			.favoriteArtistThird(profile.getFavoriteArtistThird())
+			.favoriteArtistFourth(profile.getFavoriteArtistFourth())
+			.favoriteArtistFifth(profile.getFavoriteArtistFifth())
+			.build();
+		System.out.println("response.getBackgroundImgUrl() = " + response.getBackgroundImgUrl());
+		System.out.println("profile.getBackgroundImgUrl() = " + profile.getBackgroundImgUrl());
+
+		return response;
+	}
 }

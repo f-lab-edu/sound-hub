@@ -16,6 +16,6 @@ public interface ProfileMapper {
 
 	int update(Profile profile);
 
-	@Select("SELECT * FROM profiles WHERE user_id = #{userId}")
+	@Select("SELECT user_id, genre, position, introduce, background_img_url, favorite_artist_first, favorite_artist_second, favorite_artist_third, favorite_artist_fourth, favorite_artist_fifth FROM profiles WHERE user_id = #{userId}")
 	Profile findByUserId(Long userId);
 }
