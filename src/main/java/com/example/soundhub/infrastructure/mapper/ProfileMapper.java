@@ -13,4 +13,9 @@ public interface ProfileMapper {
 
 	@Select("SELECT * FROM profiles WHERE id = #{id}")
 	Profile findById(Long id);
+
+	int update(Profile profile);
+
+	@Select("SELECT * FROM profiles WHERE user_id = #{userId}")
+	Profile findByUserId(Long userId);
 }

@@ -38,7 +38,7 @@ public class WorkResponse {
 			return getWorksInfo.builder()
 				.name(work.getName())
 				.workType(work.getWorkType())
-				.imgUrl(work.getWorkImageUrl())
+				.imgUrl(work.getWorkImgUrl())
 				.youtubeUrl(work.getYoutubeUrl())
 				.workCreatedDate(work.getWorkCreatedDate())
 				.build();

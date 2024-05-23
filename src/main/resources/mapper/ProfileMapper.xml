@@ -26,4 +26,39 @@
                 #{favoriteArtistFourth},
                 #{favoriteArtistFifth})
     </insert>
+
+    <update id="update" parameterType="com.example.soundhub.domain.Profile">
+        UPDATE profiles
+        <set>
+            <if test="genre != null">
+                genre = #{genre},
+            </if>
+            <if test="position != null">
+                position = #{position},
+            </if>
+            <if test="introduce != null">
+                introduce = #{introduce},
+            </if>
+            <if test="backgroundImgUrl != null">
+                background_Img_Url = #{backgroundImgUrl},
+            </if>
+            <if test="favoriteArtistFirst != null">
+                favorite_artist_first = #{favoriteArtistFirst},
+            </if>
+            <if test="favoriteArtistSecond != null">
+                favorite_artist_second = #{favoriteArtistSecond},
+            </if>
+            <if test="favoriteArtistThird != null">
+                favorite_artist_third = #{favoriteArtistThird},
+            </if>
+            <if test="favoriteArtistFourth != null">
+                favorite_artist_fourth = #{favoriteArtistFourth},
+            </if>
+            <if test="favoriteArtistFifth != null">
+                favorite_artist_fifth = #{favoriteArtistFifth},
+            </if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
 </mapper>

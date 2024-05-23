@@ -41,12 +41,22 @@ public class UserController {
 		return ResponseEntity.ok(tokenInfo);
 	}
 
-	@PostMapping("/addProfile")
-	public ResponseEntity<Long> addProfile(@RequestHeader String token,
-		@RequestPart MultipartFile image, @RequestPart("profile") UserRequest.addProfile request) {
+	@PostMapping("/add-profile")
+	public ResponseEntity<Long> addProfile(@RequestHeader("Authorization") String token,
+		@RequestPart("image") MultipartFile image, @RequestPart("profile") UserRequest.addProfile request) {
 		Long userId = jwtUtil.extractUserId(token);
 
 		Long profileId = userService.addProfile(request, userId, image);
+
+		return ResponseEntity.ok(profileId);
+	}
+
+	@PostMapping("/change-profile")
+	public ResponseEntity<Long> changeProfile(@RequestHeader("Authorization") String token,
+		@RequestPart("image") MultipartFile image, @RequestPart("profile") UserRequest.addProfile request) {
+		Long userId = jwtUtil.extractUserId(token);
+
+		Long profileId = userService.changeProfile(request, userId, image);
 
 		return ResponseEntity.ok(profileId);
 	}

@@ -47,9 +47,46 @@ public class ProfileDao {
 		return findById(profile.getId());
 	}
 
+	public Profile update(Profile profile) {
+		try {
+			int success = profileMapper.update(profile);
+			if (success == 0) { // Assuming 'create' returns the number of inserted rows.
+				log.error("No profile was created, profile details: {}", profile);
+				throw new DatabaseException(DB_INSERT_ERROR);
+			}
+		} catch (DuplicateKeyException e) {
+			log.error("Duplicate Key Insert ERROR! {}", e.getMessage());
+			log.error("Params : {}", profile);
+			throw new BadRequestException(DUPLICATE_ERROR);
+		} catch (EmptyResultDataAccessException e) {
+			throw new BadRequestException(NOT_FOUND_ERROR);
+		} catch (QueryTimeoutException e) {
+			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
+		} catch (DataAccessException e) {
+			log.error("insertWork ERROR! {}", e.getMessage());
+			log.error("Params : {}", profile);
+			throw new DatabaseException(DATABASE_ERROR);
+		}
+
+		return findByUserId(profile.getUserId());
+	}
+
 	public Profile findById(Long profileId) {
 		try {
 			return profileMapper.findById(profileId);
+		} catch (EmptyResultDataAccessException e) {
+			throw new BadRequestException(NOT_FOUND_ERROR);
+		} catch (QueryTimeoutException e) {
+			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
+		} catch (DataAccessException e) {
+			log.error("A data access error occurred: {}", e.getMessage());
+			throw new DatabaseException(DATABASE_ERROR);
+		}
+	}
+
+	public Profile findByUserId(Long userId) {
+		try {
+			return profileMapper.findByUserId(userId);
 		} catch (EmptyResultDataAccessException e) {
 			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {

@@ -93,7 +93,7 @@ public class UserService {
 			.favoriteArtistFirst(request.getFavoriteArtistFirst())
 			.favoriteArtistSecond(request.getFavoriteArtistSecond())
 			.favoriteArtistThird(request.getFavoriteArtistThird())
-			.favoriteArtistFifth(request.getFavoriteArtistFourth())
+			.favoriteArtistFourth(request.getFavoriteArtistFourth())
 			.favoriteArtistFifth(request.getFavoriteArtistFifth())
 			.build();
 
@@ -102,4 +102,33 @@ public class UserService {
 		return Result.getId();
 	}
 
+	@Transactional
+	public Long changeProfile(UserRequest.addProfile request, Long userId, MultipartFile image) {
+		String imgUrl = null;
+
+		if (image.getSize() > 0) {
+			try {
+				imgUrl = s3Service.upload(image, "images");
+			} catch (IOException e) {
+				throw new AwsS3Exception(IMAGE_UPLOAD_ERROR);
+			}
+		}
+
+		Profile profile = Profile.builder()
+			.userId(userId)
+			.genre(request.getGenre())
+			.position(request.getPosition())
+			.introduce(request.getIntroduce())
+			.backgroundImgUrl(imgUrl)
+			.favoriteArtistFirst(request.getFavoriteArtistFirst())
+			.favoriteArtistSecond(request.getFavoriteArtistSecond())
+			.favoriteArtistThird(request.getFavoriteArtistThird())
+			.favoriteArtistFourth(request.getFavoriteArtistFourth())
+			.favoriteArtistFifth(request.getFavoriteArtistFifth())
+			.build();
+
+		Profile Result = profileDao.update(profile);
+
+		return Result.getId();
+	}
 }
