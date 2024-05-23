@@ -20,10 +20,15 @@ import com.example.soundhub.presentation.dto.response.WorkResponse;
 
 import lombok.RequiredArgsConstructor;
 
+import com.example.soundhub.application.service.S3Service;
+
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/works")
 @RequiredArgsConstructor
 public class WorkController {
+	private final S3Service s3Service;
 
 	private final JwtUtil jwtUtil;
 
@@ -38,7 +43,7 @@ public class WorkController {
 
 		return ResponseEntity.ok(workId);
 	}
-
+  
 	@GetMapping("/{userId}")
 	public ResponseEntity<List<WorkResponse.getWorksInfo>> viewUserWorks(@PathVariable Long userId) {
 		List<WorkResponse.getWorksInfo> worksInfos = workService.viewUserWorks(userId);
@@ -52,5 +57,4 @@ public class WorkController {
 
 		return ResponseEntity.noContent().build();
 	}
-
 }
