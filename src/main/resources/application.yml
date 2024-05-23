@@ -29,7 +29,7 @@ cloud:
       auto: false
     stack:
       auto: false
-      
+
 logging:
   level:
     root: debug

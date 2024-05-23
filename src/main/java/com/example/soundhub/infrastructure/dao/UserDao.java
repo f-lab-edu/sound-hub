@@ -27,7 +27,7 @@ public class UserDao {
 		try {
 			return userMapper.findUserByLoginId(loginId);
 		} catch (EmptyResultDataAccessException e) {
-			throw new BadRequestException(NOT_FOUND_USER);
+			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {
 			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
 		} catch (DataAccessException e) {
@@ -40,7 +40,7 @@ public class UserDao {
 		try {
 			return userMapper.findUserById(userId);
 		} catch (EmptyResultDataAccessException e) {
-			throw new BadRequestException(NOT_FOUND_USER);
+			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {
 			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
 		} catch (DataAccessException e) {
@@ -61,7 +61,7 @@ public class UserDao {
 			log.error("Params : {}", user);
 			throw new BadRequestException(DUPLICATE_ERROR);
 		} catch (EmptyResultDataAccessException e) {
-			throw new BadRequestException(NOT_FOUND_USER);
+			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {
 			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
 		} catch (DataAccessException e) {

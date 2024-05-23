@@ -13,12 +13,12 @@ CREATE TABLE users
 
 CREATE TABLE works
 (
-    id             BIGINT       NOT NULL AUTO_INCREMENT,
-    user_id        BIGINT       NOT NULL,
-    name           VARCHAR(255) NOT NULL UNIQUE,
-    work_type      VARCHAR(255) NOT NULL,
-    youtube_url    VARCHAR(255) NOT NULL,
-    work_image_url VARCHAR(255),
-
+    id                BIGINT       NOT NULL AUTO_INCREMENT,
+    user_id           BIGINT       NOT NULL,
+    name              VARCHAR(255) NOT NULL UNIQUE,
+    work_type         VARCHAR(255) NOT NULL,
+    youtube_url       VARCHAR(255) NOT NULL,
+    work_image_url    VARCHAR(255),
+    work_created_date DATE         NOT NULL,
     PRIMARY KEY (id)
 );
