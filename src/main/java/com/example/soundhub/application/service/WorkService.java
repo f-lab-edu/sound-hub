@@ -52,7 +52,7 @@ public class WorkService {
 			.name(request.getName())
 			.workType(request.getWorkType())
 			.youtubeUrl(request.getYoutubeUrl())
-			.workImgUrl(imgUrl)
+			.workImageUrl(imgUrl)
 			.workCreatedDate(request.getWorkCreatedDate())
 			.build();
 
@@ -62,20 +62,12 @@ public class WorkService {
 	}
 
 	@Transactional
-	public List<WorkResponse.getWorksInfo> getUserWorks(Long userId) {
+	public List<WorkResponse.getWorksInfo> viewUserWorks(Long userId) {
 		List<Work> works = workDao.findAllWorksByUserId(userId);
 
-		List<WorkResponse.getWorksInfo> worksInfoList = works.stream()
-			.map(work -> WorkResponse.getWorksInfo.builder()
-				.name(work.getName())
-				.workType(work.getWorkType())
-				.imgUrl(work.getWorkImgUrl())
-				.youtubeUrl(work.getYoutubeUrl())
-				.workCreatedDate(work.getWorkCreatedDate())
-				.build())
+		return works.stream()
+			.map(WorkResponse.getWorksInfo::toDomain)
 			.toList();
-
-		return worksInfoList;
 	}
 
 	@Transactional

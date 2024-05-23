@@ -2,7 +2,7 @@ package com.example.soundhub.presentation.dto.request;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -22,7 +22,7 @@ public class WorkRequest {
 		private String youtubeUrl;
 
 		@NotBlank(message = "작업물의 발매 날짜를 입력해주세요")
-		@JsonFormat(pattern = "yyyy-MM-dd")
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
 		private LocalDate workCreatedDate;
 	}
 }

@@ -20,10 +20,15 @@ import com.example.soundhub.presentation.dto.response.WorkResponse;
 
 import lombok.RequiredArgsConstructor;
 
+import com.example.soundhub.application.service.S3Service;
+
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/works")
 @RequiredArgsConstructor
 public class WorkController {
+	private final S3Service s3Service;
 
 	private final JwtUtil jwtUtil;
 
@@ -31,17 +36,17 @@ public class WorkController {
 
 	@PostMapping("/add")
 	public ResponseEntity<Long> addWork(@RequestHeader("Authorization") String token,
-		@RequestPart("image") MultipartFile image, @RequestPart("work") WorkRequest.addWork request) {
+		@RequestPart(value = "image") MultipartFile image, @RequestPart("work") WorkRequest.addWork request) {
 		Long userId = jwtUtil.extractUserId(token);
 
 		Long workId = workService.addWork(request, userId, image);
 
 		return ResponseEntity.ok(workId);
 	}
-
+  
 	@GetMapping("/{userId}")
-	public ResponseEntity<List<WorkResponse.getWorksInfo>> getUserWorks(@PathVariable Long userId) {
-		List<WorkResponse.getWorksInfo> worksInfos = workService.getUserWorks(userId);
+	public ResponseEntity<List<WorkResponse.getWorksInfo>> viewUserWorks(@PathVariable Long userId) {
+		List<WorkResponse.getWorksInfo> worksInfos = workService.viewUserWorks(userId);
 
 		return ResponseEntity.ok(worksInfos);
 	}
@@ -50,7 +55,6 @@ public class WorkController {
 	public ResponseEntity<String> deleteMyWork(@PathVariable Long workId) {
 		workService.deleteWork(workId);
 
-		return ResponseEntity.ok("삭제 완료");
+		return ResponseEntity.noContent().build();
 	}
-
 }
