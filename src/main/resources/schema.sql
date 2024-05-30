@@ -32,10 +32,6 @@ CREATE TABLE profiles
     position               VARCHAR(255),
     introduce              TEXT,
     background_img_url     VARCHAR(255),
-    favorite_artist_first  VARCHAR(255),
-    favorite_artist_second VARCHAR(255),
-    favorite_artist_third  VARCHAR(255),
-    favorite_artist_fourth VARCHAR(255),
-    favorite_artist_fifth  VARCHAR(255),
+    favorite_artists  TEXT,
     FOREIGN KEY (user_id) REFERENCES users (id)
 );

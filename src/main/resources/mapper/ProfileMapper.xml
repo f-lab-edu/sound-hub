@@ -10,21 +10,13 @@
          position,
          introduce,
          background_Img_Url,
-         favorite_artist_first,
-         favorite_artist_second,
-         favorite_artist_third,
-         favorite_artist_fourth,
-         favorite_artist_fifth)
+         favorite_artists)
         VALUES (#{userId},
                 #{genre},
                 #{position},
                 #{introduce},
                 #{backgroundImgUrl},
-                #{favoriteArtistFirst},
-                #{favoriteArtistSecond},
-                #{favoriteArtistThird},
-                #{favoriteArtistFourth},
-                #{favoriteArtistFifth})
+                #{favoriteArtists})
     </insert>
 
     <update id="update" parameterType="com.example.soundhub.domain.Profile">
@@ -42,21 +34,10 @@
             <if test="backgroundImgUrl != null">
                 background_Img_Url = #{backgroundImgUrl},
             </if>
-            <if test="favoriteArtistFirst != null">
-                favorite_artist_first = #{favoriteArtistFirst},
+            <if test="favoriteArtist != null">
+                favorite_artist = #{favoriteArtist},
             </if>
-            <if test="favoriteArtistSecond != null">
-                favorite_artist_second = #{favoriteArtistSecond},
-            </if>
-            <if test="favoriteArtistThird != null">
-                favorite_artist_third = #{favoriteArtistThird},
-            </if>
-            <if test="favoriteArtistFourth != null">
-                favorite_artist_fourth = #{favoriteArtistFourth},
-            </if>
-            <if test="favoriteArtistFifth != null">
-                favorite_artist_fifth = #{favoriteArtistFifth},
-            </if>
+
         </set>
         WHERE user_id = #{userId}
     </update>

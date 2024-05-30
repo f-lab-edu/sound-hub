@@ -19,6 +19,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.example.soundhub.config.exception.AwsS3Exception;
 import com.example.soundhub.config.exception.DatabaseException;
 
 import lombok.RequiredArgsConstructor;
@@ -33,21 +34,22 @@ public class S3Service {
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
 
-	public String upload(MultipartFile multipartFile, String dirName) throws IOException {
+	public String upload(MultipartFile multipartFile, String dirName) {
 		log.debug("Attempting to upload file [{}] to directory [{}]", multipartFile.getOriginalFilename(), dirName);
 
-		File uploadFile = convert(multipartFile)
-			.orElseThrow(() -> new IllegalArgumentException("Failed to convert MultipartFile to File"));
-
+		File uploadFile = null;
 		try {
-			String fileUrl = uploadToS3(uploadFile, dirName);
-			if (!uploadFile.delete()) {
+			uploadFile = convert(multipartFile)
+				.orElseThrow(() -> new IllegalArgumentException("Failed to convert MultipartFile to File"));
+
+			return uploadToS3(uploadFile, dirName);
+		} catch (IOException e) {
+			log.error("Error uploading file to S3", e);
+			throw new AwsS3Exception(IMAGE_UPLOAD_ERROR);
+		} finally {
+			if (uploadFile != null && !uploadFile.delete()) {
 				log.error("Failed to delete temporary file [{}]", uploadFile.getPath());
 			}
-			return fileUrl;
-		} catch (Exception e) {
-			log.error("Error uploading file [{}] to S3 bucket [{}]", uploadFile.getName(), bucket, e);
-			throw e;
 		}
 	}
 

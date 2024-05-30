@@ -2,13 +2,13 @@ package com.example.soundhub.application.service;
 
 import static com.example.soundhub.config.exception.ErrorResponseStatus.*;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.soundhub.config.exception.AwsS3Exception;
 import com.example.soundhub.config.exception.BadRequestException;
 import com.example.soundhub.domain.Profile;
 import com.example.soundhub.domain.User;
@@ -39,11 +39,7 @@ public class UserService {
 		String imgUrl = null;
 
 		if (image.getSize() > 0) {
-			try {
-				imgUrl = s3Service.upload(image, "images");
-			} catch (IOException e) {
-				throw new AwsS3Exception(IMAGE_UPLOAD_ERROR);
-			}
+			imgUrl = s3Service.upload(image, "images");
 		}
 
 		User user = User.builder()
@@ -67,9 +63,7 @@ public class UserService {
 			throw new BadRequestException(INVALID_PWD);
 		}
 
-		UserResponse.tokenInfo tokenInfo = jwtUtil.generateTokens(user.getId());
-
-		return tokenInfo;
+		return jwtUtil.generateTokens(user.getId());
 	}
 
 	@Transactional
@@ -77,12 +71,16 @@ public class UserService {
 		String imgUrl = null;
 
 		if (image.getSize() > 0) {
-			try {
-				imgUrl = s3Service.upload(image, "images");
-			} catch (IOException e) {
-				throw new AwsS3Exception(IMAGE_UPLOAD_ERROR);
-			}
+			imgUrl = s3Service.upload(image, "images");
 		}
+
+		List<String> favoriteArtists = new ArrayList<>();
+
+		favoriteArtists.add(request.getFavoriteArtistFirst());
+		favoriteArtists.add(request.getFavoriteArtistSecond());
+		favoriteArtists.add(request.getFavoriteArtistThird());
+		favoriteArtists.add(request.getFavoriteArtistFourth());
+		favoriteArtists.add(request.getFavoriteArtistFifth());
 
 		Profile profile = Profile.builder()
 			.userId(userId)
@@ -90,11 +88,7 @@ public class UserService {
 			.position(request.getPosition())
 			.introduce(request.getIntroduce())
 			.backgroundImgUrl(imgUrl)
-			.favoriteArtistFirst(request.getFavoriteArtistFirst())
-			.favoriteArtistSecond(request.getFavoriteArtistSecond())
-			.favoriteArtistThird(request.getFavoriteArtistThird())
-			.favoriteArtistFourth(request.getFavoriteArtistFourth())
-			.favoriteArtistFifth(request.getFavoriteArtistFifth())
+			.favoriteArtists(favoriteArtists)
 			.build();
 
 		Profile Result = profileDao.create(profile);
@@ -107,12 +101,16 @@ public class UserService {
 		String imgUrl = null;
 
 		if (image.getSize() > 0) {
-			try {
-				imgUrl = s3Service.upload(image, "images");
-			} catch (IOException e) {
-				throw new AwsS3Exception(IMAGE_UPLOAD_ERROR);
-			}
+			imgUrl = s3Service.upload(image, "images");
 		}
+
+		List<String> favoriteArtists = new ArrayList<>();
+
+		favoriteArtists.add(request.getFavoriteArtistFirst());
+		favoriteArtists.add(request.getFavoriteArtistSecond());
+		favoriteArtists.add(request.getFavoriteArtistThird());
+		favoriteArtists.add(request.getFavoriteArtistFourth());
+		favoriteArtists.add(request.getFavoriteArtistFifth());
 
 		Profile profile = Profile.builder()
 			.userId(userId)
@@ -120,11 +118,7 @@ public class UserService {
 			.position(request.getPosition())
 			.introduce(request.getIntroduce())
 			.backgroundImgUrl(imgUrl)
-			.favoriteArtistFirst(request.getFavoriteArtistFirst())
-			.favoriteArtistSecond(request.getFavoriteArtistSecond())
-			.favoriteArtistThird(request.getFavoriteArtistThird())
-			.favoriteArtistFourth(request.getFavoriteArtistFourth())
-			.favoriteArtistFifth(request.getFavoriteArtistFifth())
+			.favoriteArtists(favoriteArtists)
 			.build();
 
 		Profile Result = profileDao.update(profile);
@@ -142,12 +136,9 @@ public class UserService {
 			.position(profile.getPosition())
 			.introduce(profile.getIntroduce())
 			.backgroundImgUrl(profile.getBackgroundImgUrl())
-			.favoriteArtistFirst(profile.getFavoriteArtistFirst())
-			.favoriteArtistSecond(profile.getFavoriteArtistSecond())
-			.favoriteArtistThird(profile.getFavoriteArtistThird())
-			.favoriteArtistFourth(profile.getFavoriteArtistFourth())
-			.favoriteArtistFifth(profile.getFavoriteArtistFifth())
+			.favoriteArtist(profile.getFavoriteArtists())
 			.build();
+
 		System.out.println("response.getBackgroundImgUrl() = " + response.getBackgroundImgUrl());
 		System.out.println("profile.getBackgroundImgUrl() = " + profile.getBackgroundImgUrl());
 

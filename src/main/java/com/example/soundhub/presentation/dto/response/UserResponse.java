@@ -1,5 +1,7 @@
 package com.example.soundhub.presentation.dto.response;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,10 +22,6 @@ public class UserResponse {
 		private String position;
 		private String introduce;
 		private String backgroundImgUrl;
-		private String favoriteArtistFirst;
-		private String favoriteArtistSecond;
-		private String favoriteArtistThird;
-		private String favoriteArtistFourth;
-		private String favoriteArtistFifth;
+		private List<String> favoriteArtist;
 	}
 }

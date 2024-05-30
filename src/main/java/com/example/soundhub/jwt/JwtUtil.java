@@ -28,13 +28,11 @@ public class JwtUtil {
 		String accessToken = createAccessToken(userId);
 		String refreshToken = createRefreshToken(userId);
 
-		UserResponse.tokenInfo tokenInfo = UserResponse.tokenInfo.builder()
+		return UserResponse.tokenInfo.builder()
 			.grantType("Bearer")
 			.accessToken(accessToken)
 			.refreshToken(refreshToken)
 			.build();
-
-		return tokenInfo;
 	}
 
 	private String createAccessToken(Long userId) {
