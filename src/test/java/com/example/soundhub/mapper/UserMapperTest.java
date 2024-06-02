@@ -22,7 +22,12 @@ public class UserMapperTest {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
-	User user = User.builder().name("name").loginId("loginId").password("password").build();
+	User user = User.builder()
+		.name("name")
+		.loginId("loginId")
+		.password("password")
+		.profileImgUrl("www.S3.com")
+		.build();
 
 	@AfterEach
 	public void afterEach() {
@@ -47,7 +52,7 @@ public class UserMapperTest {
 	@Test
 	void findByUserId() {
 		userMapper.create(user);
-		User foundUser = userMapper.findUserById(user.getId());
+		User foundUser = userMapper.findById(user.getId());
 
 		assertThat(user.getLoginId()).isEqualTo(foundUser.getLoginId());
 	}

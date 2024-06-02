@@ -25,9 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class WorkService {
-
-	private final JwtUtil jwtUtil;
-
 	private final WorkDao workDao;
 
 	private final UserDao userDao;
@@ -40,11 +37,7 @@ public class WorkService {
 
 		String imgUrl = null;
 		if (image.getSize() > 0) {
-			try {
-				imgUrl = s3Service.upload(image, "images");
-			} catch (IOException e) {
-				throw new AwsS3Exception(IMAGE_UPLOAD_ERROR);
-			}
+			imgUrl = s3Service.upload(image, "images");
 		}
 
 		Work work = Work.builder()
@@ -52,7 +45,7 @@ public class WorkService {
 			.name(request.getName())
 			.workType(request.getWorkType())
 			.youtubeUrl(request.getYoutubeUrl())
-			.workImageUrl(imgUrl)
+			.workImgUrl(imgUrl)
 			.workCreatedDate(request.getWorkCreatedDate())
 			.build();
 

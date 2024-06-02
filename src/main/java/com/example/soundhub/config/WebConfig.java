@@ -17,5 +17,9 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(jwtInterceptor).addPathPatterns("/work/**"); // Apply to specific patterns
+		registry.addInterceptor(jwtInterceptor).addPathPatterns("/users/add-profile");
+		registry.addInterceptor(jwtInterceptor).addPathPatterns("/users/change-profile");
+		registry.addInterceptor(jwtInterceptor).addPathPatterns("/users/profile");
 	}
+
 }

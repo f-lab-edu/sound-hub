@@ -57,6 +57,7 @@ public class WorkServiceTest {
 			.name("JohnDoe")
 			.loginId("johndoe123")
 			.password("password123")
+			.profileImgUrl("www.S3.wpwpwp")
 			.build();
 
 		MockMultipartFile file = new MockMultipartFile(

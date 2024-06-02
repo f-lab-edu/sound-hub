@@ -27,7 +27,7 @@ public class WorkMapperTest {
 		name("work1").
 		workType("SONG").
 		youtubeUrl("www.youtube.com/ww1").
-		workImageUrl("www.s3.com/1112").
+		workImgUrl("www.s3.com/1112").
 		build();
 
 	@AfterEach
@@ -45,10 +45,10 @@ public class WorkMapperTest {
 	@Test
 	void findByWorkId() {
 		workMapper.create(work);
-		Work foundWork = workMapper.findWorkById(work.getId());
+		Work foundWork = workMapper.findById(work.getId());
 
 		assertThat(work.getName()).isEqualTo(foundWork.getName());
-		assertThat(work.getWorkImageUrl()).isEqualTo(foundWork.getWorkImageUrl());
+		assertThat(work.getWorkImgUrl()).isEqualTo(foundWork.getWorkImgUrl());
 	}
 
 }

@@ -10,13 +10,15 @@ public class User {
 	private final String name;
 	private final String loginId;
 	private final String password;
+	private final String profileImgUrl;
 	private Long id;
 
 	@Builder
-	public User(String name, String loginId, String password) {
+	public User(String name, String loginId, String password, String profileImgUrl) {
 		this.name = name;
 		this.loginId = loginId;
 		this.password = password;
+		this.profileImgUrl = profileImgUrl;
 	}
 
 	public void setId(Long id) {

@@ -28,13 +28,11 @@ public class JwtUtil {
 		String accessToken = createAccessToken(userId);
 		String refreshToken = createRefreshToken(userId);
 
-		UserResponse.tokenInfo tokenInfo = UserResponse.tokenInfo.builder()
+		return UserResponse.tokenInfo.builder()
 			.grantType("Bearer")
 			.accessToken(accessToken)
 			.refreshToken(refreshToken)
 			.build();
-
-		return tokenInfo;
 	}
 
 	private String createAccessToken(Long userId) {
@@ -91,10 +89,8 @@ public class JwtUtil {
 			.replace("_", "/")));
 
 		String result = payload.substring(payload.indexOf("userId") + 8, payload.indexOf("userId") + 9);
-		Long userId = Long.parseLong(result);
 
-		System.out.println("userId: " + userId);
-		return userId;
+		return Long.parseLong(result);
 	}
 
 }

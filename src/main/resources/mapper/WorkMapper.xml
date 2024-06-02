@@ -9,13 +9,15 @@
          name,
          work_type,
          youtube_url,
-         work_image_url,
+         work_img_url,
          work_created_date)
         VALUES (#{userId},
                 #{name},
                 #{workType},
                 #{youtubeUrl},
-                #{workImageUrl},
+                #{workImgUrl},
                 #{workCreatedDate})
     </insert>
+
+
 </mapper>
