@@ -1,5 +1,7 @@
 package com.example.soundhub.presentation.dto.request;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -41,11 +43,7 @@ public class UserRequest {
 		private String position;
 		private String introduce;
 		private String backgroundImgUrl;
-		private String favoriteArtistFirst;
-		private String favoriteArtistSecond;
-		private String favoriteArtistThird;
-		private String favoriteArtistFourth;
-		private String favoriteArtistFifth;
+		private List<String> favoriteArtists;
 	}
 }
 

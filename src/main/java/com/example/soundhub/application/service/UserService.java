@@ -66,21 +66,13 @@ public class UserService {
 	public Long addProfile(UserRequest.addProfile request, Long userId, MultipartFile image) {
 		String imgUrl = s3Service.upload(image, "images");
 
-		List<String> favoriteArtists = new ArrayList<>();
-
-		favoriteArtists.add(request.getFavoriteArtistFirst());
-		favoriteArtists.add(request.getFavoriteArtistSecond());
-		favoriteArtists.add(request.getFavoriteArtistThird());
-		favoriteArtists.add(request.getFavoriteArtistFourth());
-		favoriteArtists.add(request.getFavoriteArtistFifth());
-
 		Profile profile = Profile.builder()
 			.userId(userId)
 			.genre(request.getGenre())
 			.position(request.getPosition())
 			.introduce(request.getIntroduce())
 			.backgroundImgUrl(imgUrl)
-			.favoriteArtists(favoriteArtists)
+			.favoriteArtists(request.getFavoriteArtists())
 			.build();
 
 		Profile Result = profileDao.create(profile);
@@ -92,21 +84,13 @@ public class UserService {
 	public Long changeProfile(UserRequest.addProfile request, Long userId, MultipartFile image) {
 		String imgUrl = s3Service.upload(image, "images");
 
-		List<String> favoriteArtists = new ArrayList<>();
-
-		favoriteArtists.add(request.getFavoriteArtistFirst());
-		favoriteArtists.add(request.getFavoriteArtistSecond());
-		favoriteArtists.add(request.getFavoriteArtistThird());
-		favoriteArtists.add(request.getFavoriteArtistFourth());
-		favoriteArtists.add(request.getFavoriteArtistFifth());
-
 		Profile profile = Profile.builder()
 			.userId(userId)
 			.genre(request.getGenre())
 			.position(request.getPosition())
 			.introduce(request.getIntroduce())
 			.backgroundImgUrl(imgUrl)
-			.favoriteArtists(favoriteArtists)
+			.favoriteArtists(request.getFavoriteArtists())
 			.build();
 
 		Profile Result = profileDao.update(profile);
