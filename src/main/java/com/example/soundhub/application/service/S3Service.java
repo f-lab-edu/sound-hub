@@ -35,6 +35,11 @@ public class S3Service {
 	private String bucket;
 
 	public String upload(MultipartFile multipartFile, String dirName) {
+		if (multipartFile.getSize() <= 0) {
+			log.debug("Empty file received, upload skipped");
+			return null;
+		}
+
 		log.debug("Attempting to upload file [{}] to directory [{}]", multipartFile.getOriginalFilename(), dirName);
 
 		File uploadFile = null;

@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 public class StringListTypeHandler extends BaseTypeHandler<List<String>> {
 	@Override
 	public void setNonNullParameter(PreparedStatement ps, int i, List<String> parameter, JdbcType jdbcType) throws SQLException {
-		// 리스트를 콤마로 구분된 하나의 문자열로 변환
 		String joined = String.join(",", parameter);
 		ps.setString(i, joined);
 	}

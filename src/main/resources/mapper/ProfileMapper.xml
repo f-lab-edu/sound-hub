@@ -34,8 +34,8 @@
             <if test="backgroundImgUrl != null">
                 background_Img_Url = #{backgroundImgUrl},
             </if>
-            <if test="favoriteArtist != null">
-                favorite_artist = #{favoriteArtist},
+            <if test="favoriteArtists != null">
+                favorite_artists = #{favoriteArtists},
             </if>
 
         </set>

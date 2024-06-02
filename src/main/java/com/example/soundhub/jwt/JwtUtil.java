@@ -89,10 +89,8 @@ public class JwtUtil {
 			.replace("_", "/")));
 
 		String result = payload.substring(payload.indexOf("userId") + 8, payload.indexOf("userId") + 9);
-		Long userId = Long.parseLong(result);
 
-		System.out.println("userId: " + userId);
-		return userId;
+		return Long.parseLong(result);
 	}
 
 }

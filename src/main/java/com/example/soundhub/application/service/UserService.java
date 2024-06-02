@@ -36,11 +36,7 @@ public class UserService {
 
 	@Transactional
 	public String registerUser(UserRequest.join request, MultipartFile image) {
-		String imgUrl = null;
-
-		if (image.getSize() > 0) {
-			imgUrl = s3Service.upload(image, "images");
-		}
+		String imgUrl = s3Service.upload(image, "images");
 
 		User user = User.builder()
 			.name(request.getName())
@@ -68,11 +64,7 @@ public class UserService {
 
 	@Transactional
 	public Long addProfile(UserRequest.addProfile request, Long userId, MultipartFile image) {
-		String imgUrl = null;
-
-		if (image.getSize() > 0) {
-			imgUrl = s3Service.upload(image, "images");
-		}
+		String imgUrl = s3Service.upload(image, "images");
 
 		List<String> favoriteArtists = new ArrayList<>();
 
@@ -98,11 +90,7 @@ public class UserService {
 
 	@Transactional
 	public Long changeProfile(UserRequest.addProfile request, Long userId, MultipartFile image) {
-		String imgUrl = null;
-
-		if (image.getSize() > 0) {
-			imgUrl = s3Service.upload(image, "images");
-		}
+		String imgUrl = s3Service.upload(image, "images");
 
 		List<String> favoriteArtists = new ArrayList<>();
 
@@ -130,7 +118,7 @@ public class UserService {
 	public UserResponse.viewProfile viewProfile(Long userId, boolean isMyProfile) {
 		Profile profile = profileDao.findByUserId(userId);
 
-		UserResponse.viewProfile response = UserResponse.viewProfile.builder()
+		return UserResponse.viewProfile.builder()
 			.isMyProfile(isMyProfile)
 			.genre(profile.getGenre())
 			.position(profile.getPosition())
@@ -138,10 +126,5 @@ public class UserService {
 			.backgroundImgUrl(profile.getBackgroundImgUrl())
 			.favoriteArtist(profile.getFavoriteArtists())
 			.build();
-
-		System.out.println("response.getBackgroundImgUrl() = " + response.getBackgroundImgUrl());
-		System.out.println("profile.getBackgroundImgUrl() = " + profile.getBackgroundImgUrl());
-
-		return response;
 	}
 }

@@ -5,9 +5,11 @@ import java.util.List;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @EqualsAndHashCode
 @Getter
+@ToString
 public class Profile {
 	private final Long userId;
 	private final String genre;
