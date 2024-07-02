@@ -1,12 +1,21 @@
 spring:
   datasource:
-    url: jdbc:h2:~/testDB
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MYSQL
     driverClassName: org.h2.Driver
     username: sa
     password:
+    h2:
+      console:
+        enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
   sql:
     init:
-      mode: always
+      schema-locations: classpath:schema.sql
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:
@@ -16,7 +25,6 @@ jwt:
   secret: c3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwK
   refreshTokenValidity: 3600
   accessTokenValidity: 3000
-
 
 logging:
   level:
