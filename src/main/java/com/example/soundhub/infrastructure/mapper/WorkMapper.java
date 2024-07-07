@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import com.example.soundhub.domain.Work;
@@ -22,4 +23,7 @@ public interface WorkMapper {
 
 	@Delete("DELETE FROM works WHERE id = #{workId}")
 	void deleteWork(Long workId);
+
+	@Update("UPDATE works SET number_of_plays = number_of_plays + 1 WHERE id = #{id}")
+	int updateNumberOfPlays(Long id);
 }

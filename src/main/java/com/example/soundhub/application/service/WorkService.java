@@ -35,10 +35,7 @@ public class WorkService {
 	public Long addWork(WorkRequest.addWork request, Long userId, MultipartFile image) {
 		User user = userDao.findById(userId);
 
-		String imgUrl = null;
-		if (image.getSize() > 0) {
-			imgUrl = s3Service.upload(image, "images");
-		}
+		String imgUrl = s3Service.upload(image, "images");
 
 		Work work = Work.builder()
 			.userId(user.getId())
@@ -47,6 +44,8 @@ public class WorkService {
 			.youtubeUrl(request.getYoutubeUrl())
 			.workImgUrl(imgUrl)
 			.workCreatedDate(request.getWorkCreatedDate())
+			.likes(0L)
+			.numberOfPlays(0L)
 			.build();
 
 		workDao.create(work);
@@ -66,5 +65,15 @@ public class WorkService {
 	@Transactional
 	public void deleteWork(Long workId) {
 		workDao.deleteWork(workId);
+	}
+
+	@Transactional
+	public String playUserWork(Long workId){
+		Work work = workDao.findById(workId);
+		work.incrementPlays();
+
+		workDao.updateNumberOfPlays(work);
+
+		return work.getYoutubeUrl();
 	}
 }

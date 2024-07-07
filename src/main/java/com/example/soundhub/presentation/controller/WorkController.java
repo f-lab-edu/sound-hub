@@ -20,16 +20,10 @@ import com.example.soundhub.presentation.dto.response.WorkResponse;
 
 import lombok.RequiredArgsConstructor;
 
-import com.example.soundhub.application.service.S3Service;
-
-import lombok.RequiredArgsConstructor;
-
 @RestController
 @RequestMapping("/works")
 @RequiredArgsConstructor
 public class WorkController {
-	private final S3Service s3Service;
-
 	private final JwtUtil jwtUtil;
 
 	private final WorkService workService;
@@ -51,10 +45,17 @@ public class WorkController {
 		return ResponseEntity.ok(worksInfos);
 	}
 
-	@DeleteMapping("/{workId}")
+	@DeleteMapping("/{workId}/delete")
 	public ResponseEntity<String> deleteMyWork(@PathVariable Long workId) {
 		workService.deleteWork(workId);
 
 		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/{workId}/play")
+	public ResponseEntity<String> playUserWork(@PathVariable Long workId){
+		String youtubeUrl = workService.playUserWork(workId);
+
+		return ResponseEntity.ok(youtubeUrl);
 	}
 }

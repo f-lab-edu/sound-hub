@@ -16,6 +16,7 @@ public enum ErrorResponseStatus {
 	NOT_FOUND_ERROR(false, 4003, "해당 레코드가 존재하지 않습니다."),
 	IMAGE_DELETE_ERROR(false, 4004, "이미지 삭제 실패"),
 	IMAGE_UPLOAD_ERROR(false, 4005, "이미지 업로드 실패"),
+	DB_UPDATE_ERROR(false, 4006, "DB에 값을 수정 하는데 실패 했습니다."),
 
 	//5000 : Server connection 오류
 	SERVER_ERROR(false, 5000, "서버와의 연결에 실패하였습니다."),

@@ -28,7 +28,7 @@ public class WorkDao {
 	public Work create(Work work) {
 		try {
 			int success = workMapper.create(work);
-			if (success == 0) { // Assuming 'create' returns the number of inserted rows.
+			if (success == 0) {
 				log.error("No work was created, work details: {}", work);
 				throw new DatabaseException(DB_INSERT_ERROR);
 			}
@@ -78,6 +78,23 @@ public class WorkDao {
 	public void deleteWork(Long workId) {
 		try {
 			workMapper.deleteWork(workId);
+		} catch (EmptyResultDataAccessException e) {
+			throw new BadRequestException(NOT_FOUND_ERROR);
+		} catch (QueryTimeoutException e) {
+			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
+		} catch (DataAccessException e) {
+			log.error("A data access error occurred: {}", e.getMessage());
+			throw new DatabaseException(DATABASE_ERROR);
+		}
+	}
+
+	public void updateNumberOfPlays(Work work){
+		try {
+			int success = workMapper.updateNumberOfPlays(work.getId());
+			if (success == 0) {
+				log.error("update number of plays is failed : {}", work);
+				throw new DatabaseException(DB_UPDATE_ERROR);
+			}
 		} catch (EmptyResultDataAccessException e) {
 			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {
