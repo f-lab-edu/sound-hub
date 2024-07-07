@@ -10,8 +10,8 @@
 
     <typeHandlers>
         <typeHandler handler="com.example.soundhub.infrastructure.handler.StringListTypeHandler" javaType="java.util.List"/>
+        <typeHandler handler="org.apache.ibatis.type.LocalDateTypeHandler" javaType="java.time.LocalDate" jdbcType="DATE"/>
     </typeHandlers>
-
 
     <mappers>
         <mapper resource="mapper/ProfileMapper.xml"/>

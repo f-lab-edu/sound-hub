@@ -10,13 +10,17 @@
          work_type,
          youtube_url,
          work_img_url,
-         work_created_date)
+         work_created_date,
+         likes,
+         number_of_plays)
         VALUES (#{userId},
                 #{name},
                 #{workType},
                 #{youtubeUrl},
                 #{workImgUrl},
-                #{workCreatedDate})
+                #{workCreatedDate},
+                #{likes},
+                #{numberOfPlays})
     </insert>
 
 

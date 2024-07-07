@@ -21,6 +21,8 @@ CREATE TABLE works
     youtube_url       VARCHAR(255) NOT NULL,
     work_img_url      VARCHAR(255),
     work_created_date DATE         NOT NULL,
+    likes             BIGINT       NOT NULL,
+    number_of_plays  BIGINT       NOT NULL,
     PRIMARY KEY (id)
 );
 
