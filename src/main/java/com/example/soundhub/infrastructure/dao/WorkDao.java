@@ -51,7 +51,11 @@ public class WorkDao {
 
 	public Work findById(Long workId) {
 		try {
-			return workMapper.findById(workId);
+			Work work = workMapper.findById(workId);
+			if (work == null) {
+				throw new BadRequestException(NOT_FOUND_ERROR);
+			}
+			return work;
 		} catch (EmptyResultDataAccessException e) {
 			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {
@@ -64,7 +68,11 @@ public class WorkDao {
 
 	public List<Work> findAllWorksByUserId(Long userId) {
 		try {
-			return workMapper.findAllWorksByUserId(userId);
+			List<Work> works = workMapper.findAllWorksByUserId(userId);
+			if (works == null) {
+				throw new BadRequestException(NOT_FOUND_ERROR);
+			}
+			return works;
 		} catch (EmptyResultDataAccessException e) {
 			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {
@@ -88,7 +96,7 @@ public class WorkDao {
 		}
 	}
 
-	public void updateNumberOfPlays(Work work){
+	public void updateNumberOfPlays(Work work) {
 		try {
 			int success = workMapper.updateNumberOfPlays(work.getId());
 			if (success == 0) {
