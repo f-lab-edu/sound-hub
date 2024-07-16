@@ -3,6 +3,7 @@ package com.example.soundhub.mapper;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,18 @@ public class UserMapperTest {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
-	User user = User.builder()
-		.name("name")
-		.loginId("loginId")
-		.password("password")
-		.profileImgUrl("www.S3.com")
-		.build();
+	User user;
+
+	@BeforeEach
+	public void setUp() {
+		jdbcTemplate.update("INSERT INTO users (name, login_Id, password, profil_img_url) VALUES ('name', 'loginId', 'password', 'www.S3.com')");
+		user = User.builder()
+			.name("name")
+			.loginId("loginId")
+			.password("password")
+			.profileImgUrl("www.S3.com")
+			.build();
+	}
 
 	@AfterEach
 	public void afterEach() {
@@ -57,3 +64,4 @@ public class UserMapperTest {
 		assertThat(user.getLoginId()).isEqualTo(foundUser.getLoginId());
 	}
 }
+

@@ -32,6 +32,8 @@ public class UserControllerTest {
 	@BeforeEach
 	void setUp() {
 		RestAssured.port = port;
+		// 필요한 초기 데이터 삽입
+		jdbcTemplate.update("INSERT INTO users (id, username, password) VALUES (1, 'testuser', 'password')");
 	}
 
 	@AfterEach
