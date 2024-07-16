@@ -21,6 +21,8 @@ CREATE TABLE works
     youtube_url       VARCHAR(255) NOT NULL,
     work_img_url      VARCHAR(255),
     work_created_date DATE         NOT NULL,
+    likes             BIGINT       NOT NULL,
+    number_of_plays  BIGINT       NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -34,4 +36,13 @@ CREATE TABLE profiles
     background_img_url     VARCHAR(255),
     favorite_artists  TEXT,
     FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE work_likes
+(
+    id                     BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id                BIGINT NOT NULL,
+    work_id                BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (work_id) REFERENCES works (id)
 );

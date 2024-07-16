@@ -84,7 +84,11 @@ public class ProfileDao {
 
 	public Profile findById(Long profileId) {
 		try {
-			return profileMapper.findById(profileId);
+			Profile profile = profileMapper.findById(profileId);
+			if (profile == null) {
+				throw new BadRequestException(NOT_FOUND_ERROR);
+			}
+			return profile;
 		} catch (EmptyResultDataAccessException e) {
 			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {
@@ -97,7 +101,11 @@ public class ProfileDao {
 
 	public Profile findByUserId(Long userId) {
 		try {
-			return profileMapper.findByUserId(userId);
+			Profile profile = profileMapper.findByUserId(userId);
+			if (profile == null) {
+				throw new BadRequestException(NOT_FOUND_ERROR);
+			}
+			return profile;
 		} catch (EmptyResultDataAccessException e) {
 			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {

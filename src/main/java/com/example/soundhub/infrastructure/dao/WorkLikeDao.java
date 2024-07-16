@@ -2,8 +2,6 @@ package com.example.soundhub.infrastructure.dao;
 
 import static com.example.soundhub.config.exception.ErrorResponseStatus.*;
 
-import java.util.List;
-
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -12,8 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import com.example.soundhub.config.exception.BadRequestException;
 import com.example.soundhub.config.exception.DatabaseException;
-import com.example.soundhub.domain.Work;
-import com.example.soundhub.infrastructure.mapper.WorkMapper;
+import com.example.soundhub.domain.WorkLike;
+import com.example.soundhub.infrastructure.mapper.WorkLikeMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,20 +19,20 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 @Slf4j
 @RequiredArgsConstructor
-public class WorkDao {
+public class WorkLikeDao {
 
-	private final WorkMapper workMapper;
+	private final WorkLikeMapper workLikeMapper;
 
-	public Work create(Work work) {
+	public WorkLike create(WorkLike worklike) {
 		try {
-			int success = workMapper.create(work);
+			int success = workLikeMapper.create(worklike);
 			if (success == 0) {
-				log.error("No work was created, work details: {}", work);
+				log.error("No work was created, work details: {}", worklike);
 				throw new DatabaseException(DB_INSERT_ERROR);
 			}
 		} catch (DuplicateKeyException e) {
 			log.error("Duplicate Key Insert ERROR! {}", e.getMessage());
-			log.error("Params : {}", work);
+			log.error("Params : {}", worklike);
 			throw new BadRequestException(DUPLICATE_ERROR);
 		} catch (EmptyResultDataAccessException e) {
 			throw new BadRequestException(NOT_FOUND_ERROR);
@@ -42,20 +40,20 @@ public class WorkDao {
 			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
 		} catch (DataAccessException e) {
 			log.error("insertWork ERROR! {}", e.getMessage());
-			log.error("Params : {}", work);
+			log.error("Params : {}", worklike);
 			throw new DatabaseException(DATABASE_ERROR);
 		}
 
-		return findById(work.getId());
+		return findById(worklike.getId());
 	}
 
-	public Work findById(Long workId) {
+	public WorkLike findById(Long workLikeId) {
 		try {
-			Work work = workMapper.findById(workId);
-			if (work == null) {
+			WorkLike workLike = workLikeMapper.findById(workLikeId);
+			if (workLike == null) {
 				throw new BadRequestException(NOT_FOUND_ERROR);
 			}
-			return work;
+			return workLike;
 		} catch (EmptyResultDataAccessException e) {
 			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {
@@ -66,67 +64,35 @@ public class WorkDao {
 		}
 	}
 
-	public List<Work> findAllWorksByUserId(Long userId) {
+
+	public boolean doesWorkLikeExistForUser(Long userId, Long workId) {
 		try {
-			List<Work> works = workMapper.findAllWorksByUserId(userId);
-			if (works == null) {
+			return workLikeMapper.doesWorkLikeExistForUser(userId, workId);
+		} catch (EmptyResultDataAccessException e) {
+			throw new BadRequestException(NOT_FOUND_ERROR);
+		} catch (QueryTimeoutException e) {
+			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
+		} catch (DataAccessException e) {
+			log.error("A data access error occurred: {}", e.getMessage());
+			throw new DatabaseException(DATABASE_ERROR);
+		}
+	}
+
+	public void deleteByUserIdAndWorkId(Long userId, Long workId) {
+		try {
+			int success = workLikeMapper.deleteByUserIdAndWorkId(userId, workId);
+			if (success == 0) {
+				log.error("No work like found to delete for user_id: {} and work_id: {}", userId, workId);
 				throw new BadRequestException(NOT_FOUND_ERROR);
 			}
-			return works;
 		} catch (EmptyResultDataAccessException e) {
 			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {
 			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
 		} catch (DataAccessException e) {
-			log.error("A data access error occurred: {}", e.getMessage());
+			log.error("deleteWorkLike ERROR! {}", e.getMessage());
 			throw new DatabaseException(DATABASE_ERROR);
 		}
 	}
 
-	public void deleteWork(Long workId) {
-		try {
-			workMapper.deleteWork(workId);
-		} catch (EmptyResultDataAccessException e) {
-			throw new BadRequestException(NOT_FOUND_ERROR);
-		} catch (QueryTimeoutException e) {
-			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
-		} catch (DataAccessException e) {
-			log.error("A data access error occurred: {}", e.getMessage());
-			throw new DatabaseException(DATABASE_ERROR);
-		}
-	}
-
-	public void updateNumberOfPlays(Work work) {
-		try {
-			int success = workMapper.updateNumberOfPlays(work.getId(), work.getNumberOfPlays());
-			if (success == 0) {
-				log.error("update number of plays is failed : {}", work);
-				throw new DatabaseException(DB_UPDATE_ERROR);
-			}
-		} catch (EmptyResultDataAccessException e) {
-			throw new BadRequestException(NOT_FOUND_ERROR);
-		} catch (QueryTimeoutException e) {
-			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
-		} catch (DataAccessException e) {
-			log.error("A data access error occurred: {}", e.getMessage());
-			throw new DatabaseException(DATABASE_ERROR);
-		}
-	}
-
-	public void updateLikes(Work work) {
-		try {
-			int success = workMapper.updateLikes(work.getId(), work.getLikes());
-			if (success == 0) {
-				log.error("update number of plays is failed : {}", work);
-				throw new DatabaseException(DB_UPDATE_ERROR);
-			}
-		} catch (EmptyResultDataAccessException e) {
-			throw new BadRequestException(NOT_FOUND_ERROR);
-		} catch (QueryTimeoutException e) {
-			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
-		} catch (DataAccessException e) {
-			log.error("A data access error occurred: {}", e.getMessage());
-			throw new DatabaseException(DATABASE_ERROR);
-		}
-	}
 }

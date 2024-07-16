@@ -25,7 +25,11 @@ public class UserDao {
 
 	public User findByLoginId(String loginId) {
 		try {
-			return userMapper.findByLoginId(loginId);
+			User user = userMapper.findByLoginId(loginId);
+			if (user == null) {
+				throw new BadRequestException(NOT_FOUND_ERROR);
+			}
+			return user;
 		} catch (EmptyResultDataAccessException e) {
 			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {
@@ -38,7 +42,11 @@ public class UserDao {
 
 	public User findById(Long userId) {
 		try {
-			return userMapper.findById(userId);
+			User user = userMapper.findById(userId);
+			if (user == null) {
+				throw new BadRequestException(NOT_FOUND_ERROR);
+			}
+			return user;
 		} catch (EmptyResultDataAccessException e) {
 			throw new BadRequestException(NOT_FOUND_ERROR);
 		} catch (QueryTimeoutException e) {
