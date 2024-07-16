@@ -38,4 +38,12 @@ public class Work {
 	public void incrementPlays() {
 		this.numberOfPlays += 1;
 	}
+
+	public void incrementLikes(){
+		this.likes += 1;
+	}
+
+	public void decrementLikes(){
+		this.likes -= 1;
+	}
 }

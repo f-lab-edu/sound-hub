@@ -37,3 +37,12 @@ CREATE TABLE profiles
     favorite_artists  TEXT,
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
+
+CREATE TABLE work_likes
+(
+    id                     BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id                BIGINT NOT NULL,
+    work_id                BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (work_id) REFERENCES works (id)
+);

@@ -112,4 +112,21 @@ public class WorkDao {
 			throw new DatabaseException(DATABASE_ERROR);
 		}
 	}
+
+	public void updateLikes(Work work) {
+		try {
+			int success = workMapper.updateLikes(work.getId(), work.getLikes());
+			if (success == 0) {
+				log.error("update number of plays is failed : {}", work);
+				throw new DatabaseException(DB_UPDATE_ERROR);
+			}
+		} catch (EmptyResultDataAccessException e) {
+			throw new BadRequestException(NOT_FOUND_ERROR);
+		} catch (QueryTimeoutException e) {
+			throw new DatabaseException(QUERY_TIMEOUT_ERROR);
+		} catch (DataAccessException e) {
+			log.error("A data access error occurred: {}", e.getMessage());
+			throw new DatabaseException(DATABASE_ERROR);
+		}
+	}
 }

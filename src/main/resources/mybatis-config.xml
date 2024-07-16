@@ -17,6 +17,7 @@
         <mapper resource="mapper/ProfileMapper.xml"/>
         <mapper resource="mapper/UserMapper.xml"/>
         <mapper resource="mapper/WorkMapper.xml"/>
+        <mapper resource="mapper/WorkLikeMapper.xml"/>
     </mappers>
 
 </configuration>

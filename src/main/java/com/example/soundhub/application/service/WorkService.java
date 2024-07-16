@@ -1,20 +1,17 @@
 package com.example.soundhub.application.service;
 
-import static com.example.soundhub.config.exception.ErrorResponseStatus.*;
-
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.soundhub.config.exception.AwsS3Exception;
 import com.example.soundhub.domain.User;
 import com.example.soundhub.domain.Work;
+import com.example.soundhub.domain.WorkLike;
 import com.example.soundhub.infrastructure.dao.UserDao;
 import com.example.soundhub.infrastructure.dao.WorkDao;
-import com.example.soundhub.jwt.JwtUtil;
+import com.example.soundhub.infrastructure.dao.WorkLikeDao;
 import com.example.soundhub.presentation.dto.request.WorkRequest;
 import com.example.soundhub.presentation.dto.response.WorkResponse;
 
@@ -28,6 +25,8 @@ public class WorkService {
 	private final WorkDao workDao;
 
 	private final UserDao userDao;
+
+	private final WorkLikeDao workLikeDao;
 
 	private final S3Service s3Service;
 
@@ -57,9 +56,7 @@ public class WorkService {
 	public List<WorkResponse.getWorksInfo> viewUserWorks(Long userId) {
 		List<Work> works = workDao.findAllWorksByUserId(userId);
 
-		return works.stream()
-			.map(WorkResponse.getWorksInfo::toDomain)
-			.toList();
+		return works.stream().map(WorkResponse.getWorksInfo::toDomain).toList();
 	}
 
 	@Transactional
@@ -68,12 +65,34 @@ public class WorkService {
 	}
 
 	@Transactional
-	public String playUserWork(Long workId){
+	public String playUserWork(Long workId) {
 		Work work = workDao.findById(workId);
 		work.incrementPlays();
 
 		workDao.updateNumberOfPlays(work);
 
 		return work.getYoutubeUrl();
+	}
+
+	@Transactional
+	public boolean likeUserWork(Long workId, Long userId) {
+		Work work = workDao.findById(workId);
+
+		if (workLikeDao.doesWorkLikeExistForUser(userId, work.getId())) {
+			workLikeDao.deleteByUserIdAndWorkId(userId, work.getId());
+
+			work.decrementLikes();
+			workDao.updateLikes(work);
+
+			return false;
+		} else {
+			WorkLike workLike = WorkLike.builder().workId(workId).userId(userId).build();
+			workLikeDao.create(workLike);
+
+			work.incrementLikes();
+			workDao.updateLikes(work);
+
+			return true;
+		}
 	}
 }

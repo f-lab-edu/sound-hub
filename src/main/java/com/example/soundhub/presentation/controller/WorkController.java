@@ -2,6 +2,7 @@ package com.example.soundhub.presentation.controller;
 
 import java.util.List;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,7 @@ public class WorkController {
 
 	private final WorkService workService;
 
-	@PostMapping("/add")
+	@PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Long> addWork(@RequestHeader("Authorization") String token,
 		@RequestPart(value = "image") MultipartFile image, @RequestPart("work") WorkRequest.addWork request) {
 		Long userId = jwtUtil.extractUserId(token);
@@ -37,7 +38,7 @@ public class WorkController {
 
 		return ResponseEntity.ok(workId);
 	}
-  
+
 	@GetMapping("/{userId}")
 	public ResponseEntity<List<WorkResponse.getWorksInfo>> viewUserWorks(@PathVariable Long userId) {
 		List<WorkResponse.getWorksInfo> worksInfos = workService.viewUserWorks(userId);
@@ -53,9 +54,18 @@ public class WorkController {
 	}
 
 	@GetMapping("/{workId}/play")
-	public ResponseEntity<String> playUserWork(@PathVariable Long workId){
+	public ResponseEntity<String> playUserWork(@PathVariable Long workId) {
 		String youtubeUrl = workService.playUserWork(workId);
 
 		return ResponseEntity.ok(youtubeUrl);
+	}
+
+	@GetMapping("/{workId}/like")
+	public ResponseEntity<Boolean> likeUserWork(@RequestHeader("Authorization") String token, @PathVariable Long workId) {
+		Long userId = jwtUtil.extractUserId(token);
+
+		boolean likes = workService.likeUserWork(workId, userId);
+
+		return ResponseEntity.ok(likes);
 	}
 }
