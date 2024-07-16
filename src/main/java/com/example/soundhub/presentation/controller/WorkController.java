@@ -19,8 +19,11 @@ import com.example.soundhub.jwt.JwtUtil;
 import com.example.soundhub.presentation.dto.request.WorkRequest;
 import com.example.soundhub.presentation.dto.response.WorkResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "WorkController", description = "작업물 관련 API")
 @RestController
 @RequestMapping("/works")
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class WorkController {
 	private final WorkService workService;
 
 	@PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@Operation(summary = "작업물 추가", description = "작업물 배경 이미지와 정보 입력, 성공 시 작업물 id 반환")
 	public ResponseEntity<Long> addWork(@RequestHeader("Authorization") String token,
 		@RequestPart(value = "image") MultipartFile image, @RequestPart("work") WorkRequest.addWork request) {
 		Long userId = jwtUtil.extractUserId(token);
@@ -40,6 +44,7 @@ public class WorkController {
 	}
 
 	@GetMapping("/{userId}")
+	@Operation(summary = "작업물 조회", description = "작업물 정보 조회")
 	public ResponseEntity<List<WorkResponse.getWorksInfo>> viewUserWorks(@PathVariable Long userId) {
 		List<WorkResponse.getWorksInfo> worksInfos = workService.viewUserWorks(userId);
 
@@ -47,6 +52,7 @@ public class WorkController {
 	}
 
 	@DeleteMapping("/{workId}/delete")
+	@Operation(summary = "작업물 삭제", description = "작업물 삭제")
 	public ResponseEntity<String> deleteMyWork(@PathVariable Long workId) {
 		workService.deleteWork(workId);
 
@@ -54,6 +60,7 @@ public class WorkController {
 	}
 
 	@GetMapping("/{workId}/play")
+	@Operation(summary = "작업물 재생", description = "작업물 재생")
 	public ResponseEntity<String> playUserWork(@PathVariable Long workId) {
 		String youtubeUrl = workService.playUserWork(workId);
 
@@ -61,6 +68,7 @@ public class WorkController {
 	}
 
 	@GetMapping("/{workId}/like")
+	@Operation(summary = "작업물 좋아요", description = "작업물 좋아요")
 	public ResponseEntity<Boolean> likeUserWork(@RequestHeader("Authorization") String token, @PathVariable Long workId) {
 		Long userId = jwtUtil.extractUserId(token);
 
