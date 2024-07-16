@@ -22,12 +22,18 @@ public class UserResponse {
 	@Builder
 	public static class viewProfile {
 		@Schema(description = "해당 유저 프로필 인지 아닌지", example = "true")
-		private boolean isMyProfile;
-		@
 		private String genre;
+
+		@Schema(description = "해당 유저의 포지션", example = "보컬")
 		private String position;
+
+		@Schema(description = "해당 유저의 자기 소개", example = "안녕하세요")
 		private String introduce;
+
+		@Schema(description = "배경 이미지 URL")
 		private String backgroundImgUrl;
+
+		@Schema(description = "사용자의 선호 아티스트 (최대 5명)", example = "[\"김건모\", \"마이클잭슨\", \"김범수\"]")
 		private List<String> favoriteArtist;
 	}
 }
