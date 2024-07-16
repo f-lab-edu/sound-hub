@@ -98,7 +98,7 @@ public class WorkDao {
 
 	public void updateNumberOfPlays(Work work) {
 		try {
-			int success = workMapper.updateNumberOfPlays(work.getId());
+			int success = workMapper.updateNumberOfPlays(work.getId(), work.getNumberOfPlays());
 			if (success == 0) {
 				log.error("update number of plays is failed : {}", work);
 				throw new DatabaseException(DB_UPDATE_ERROR);

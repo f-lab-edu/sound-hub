@@ -26,7 +26,7 @@ public interface WorkMapper {
 	void deleteWork(Long workId);
 
 	@Update("UPDATE works SET number_of_plays = number_of_plays + 1 WHERE id = #{id}")
-	int updateNumberOfPlays(Long id);
+	int updateNumberOfPlays(@Param("id") Long id, @Param("number_of_plays")Long plays);
 
 	@Update("UPDATE works SET likes = #{likes} WHERE id = #{id}")
 	int updateLikes(@Param("id") Long id, @Param("likes") Long likes);
