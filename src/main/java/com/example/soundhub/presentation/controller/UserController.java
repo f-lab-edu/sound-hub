@@ -33,11 +33,10 @@ public class UserController {
 
 	private final JwtUtil jwtUtil;
 
-	@PostMapping(value = "/join", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "/join")
 	@Operation(summary = "회원 가입", description = "프로필 이미지와 회원 가입 정보 입력, 성공 시 유저 이름 반환")
-	public ResponseEntity<String> join(@RequestPart("image") MultipartFile image,
-		@Validated @RequestPart("join") UserRequest.join request) {
-		String userName = userService.registerUser(request, image);
+	public ResponseEntity<String> join(@Validated @RequestBody UserRequest.join request) {
+		String userName = userService.registerUser(request);
 
 		return ResponseEntity.ok(userName);
 	}

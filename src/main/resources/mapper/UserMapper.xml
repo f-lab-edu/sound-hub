@@ -7,12 +7,10 @@
         INSERT INTO users
         (name,
          login_id,
-         password,
-         profile_img_url)
+         password)
         VALUES (#{name},
                 #{loginId},
-                #{password},
-                #{profileImgUrl})
+                #{password})
     </insert>
 </mapper>
 
