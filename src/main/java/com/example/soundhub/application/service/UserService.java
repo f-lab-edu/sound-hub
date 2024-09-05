@@ -2,9 +2,6 @@ package com.example.soundhub.application.service;
 
 import static com.example.soundhub.config.exception.ErrorResponseStatus.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,14 +32,12 @@ public class UserService {
 	private final S3Service s3Service;
 
 	@Transactional
-	public String registerUser(UserRequest.join request, MultipartFile image) {
-		String imgUrl = s3Service.upload(image, "images");
+	public String registerUser(UserRequest.join request) {
 
 		User user = User.builder()
 			.name(request.getName())
 			.loginId(request.getLoginId())
 			.password(request.getPassword())
-			.profileImgUrl(imgUrl)
 			.build();
 
 		User result = userDao.create(user);
